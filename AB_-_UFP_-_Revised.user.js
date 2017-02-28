@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.0
+// @version 		1.1
+// @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
+// @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
 // @include 		*https://animebytes.tv/forums.php?*action=viewunread*
 // @grant			none
@@ -178,7 +180,7 @@ $lastcell.html('<select class="tr_options" id="'+$thr_id+'"> \
 					<option id="FBGG'+$thr_id+'" title="Green background\nfor forum title." value="BGG'+$for_local+'">Green BG</option> \
 					<option id="FBGB'+$thr_id+'" title="Blue background\nfor forum title." value="BGB'+$for_local+'">Blue BG</option> \
 					<option id="FBGS'+$thr_id+'" title="Striped background\nfor forum title." value="BGS'+$for_local+'">Striped BG</option> \
-					<option id="RESF'+$thr_id+'" title="Disables background\nfor forum title." value="DEL'+$for_local+'" style="font-size:12px;">&#9888; Reset</option> \
+					<option id="RESF'+$thr_id+'" title="Disables background\nfor forum title." value="RES'+$for_local+'" style="font-size:12px;">&#9888; Reset</option> \
 					<option id="DELF'+$thr_id+'" title="Removes forum\nfrom the results." value="DEL'+$for_local+'" style="color:red;font-size:12px;">&#9888; Remove Forum</option> \
 					<option disabled></option> \
 					<option disabled style="font-weight:bold;text-decoration:underline;font-size:12px;">[ Thread : '+$thr_id+' ] </option> \
@@ -186,115 +188,106 @@ $lastcell.html('<select class="tr_options" id="'+$thr_id+'"> \
 					<option id="TBGG'+$thr_id+'" title="Green background\nfor thread title." value="BGG'+$thr_local+'">Green BG</option> \
 					<option id="TBGB'+$thr_id+'" title="Blue background\nfor thread title." value="BGB'+$thr_local+'">Blue BG</option> \
 					<option id="TBGS'+$thr_id+'" title="Striped background\nfor thread title." value="BGS'+$thr_local+'">Striped BG</option> \
-					<option id="REST'+$thr_id+'" title="Disables background\nfor thread title." value="DEL'+$thr_local+'" style="font-size:12px;">&#9888; Reset</option> \
+					<option id="REST'+$thr_id+'" title="Disables background\nfor thread title." value="RES'+$thr_local+'" style="font-size:12px;">&#9888; Reset</option> \
 					<option id="DELT'+$thr_id+'" title="Removes thread\nfrom the results." value="DEL'+$thr_local+'" style="color:red;font-size:12px;">&#9888; Remove Thread</option> \
 					<option disabled></option> \
 				</select>');
 
-												// --------------- FORUM OPTIONS ---------------
-$("#FBGR"+$thr_id).click(function(){			// Red BG for all threads in selected forum
-	if (confirm("Do you really want to add a \nRED background to this forum?\n\nID=" +this.value.substring(6) )){
- 		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#FBGG"+$thr_id).click(function(){			// Green BG for all threads in selected forum
-	if (confirm("Do you really want to add a \nGREEN background to this forum?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#FBGB"+$thr_id).click(function(){			// Blue BG for all threads in selected forum
-	if (confirm("Do you really want to add a \nBLUE background to this forum?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#FBGS"+$thr_id).click(function(){			// Striped BG for all threads in selected forum
-	if (confirm("Do you really want to add a \nSTRIPED background to this forum?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#RESF"+$thr_id).click(function(){			// Reset background settings for selected forum
-	if (confirm("Do you really want to\nReset background settings\nfor this forum?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		localStorage.removeItem($local_id);
-		console.log("localStorage LOG : " + $local_id + " is removed! ");
-	};
-});
-
-$("#DELF"+$thr_id).click(function(){			// REMOVE selected forum
-	if (confirm("Do you really want to\nREMOVE THIS FORUM\nfrom the results?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-												// --------------- THREAD OPTIONS ---------------			
-$("#TBGR"+$thr_id).click(function(){			// Red BG for selected thread
-	if (confirm("Do you really want to add a \nRED background to this thread?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#TBGG"+$thr_id).click(function(){			// Green BG for selected thread
-	if (confirm("Do you really want to add a \nGREEN background to this thread?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#TBGB"+$thr_id).click(function(){			// Blue BG for selected thread
-	if (confirm("Do you really want to add a \nBLUE background to this thread?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#TBGS"+$thr_id).click(function(){			// Striped BG for selected thread
-	if (confirm("Do you really want to add a \nSTRIPED background to this thread?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
-	};
-});
-
-$("#REST"+$thr_id).click(function(){			// Reset background settings for selected thread
-	if (confirm("Do you really want to\nReset background settings\nfor this thread?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		localStorage.removeItem($local_id);
-		console.log("localStorage LOG : " + $local_id + " is removed! ");
-	};
-});
-
-$("#DELT"+$thr_id).click(function(){			// REMOVE selected thread
-	if (confirm("Do you really want to\nREMOVE THIS THREAD\nfrom the results?\n\nID=" +this.value.substring(6) )){
-		$local_id = this.value.substring(3);
-		$local_value = this.value;
-		localStorage.setItem($local_id,$local_value);
-		console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+$(".tr_options[id=" + $thr_id + "]").change(function(){
+	if ( this.value.substring(0, 3) == "BGR" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Red BG for all threads in selected forum
+			if (confirm("Do you really want to add a \nRED background to this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Red BG for selected thread
+			if (confirm("Do you really want to add a \nRED background to this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "BGG" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Green BG for all threads in selected forum
+			if (confirm("Do you really want to add a \nGREEN background to this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Green BG for selected thread
+			if (confirm("Do you really want to add a \nGREEN background to this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "BGB" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Blue BG for all threads in selected forum
+			if (confirm("Do you really want to add a \nBLUE background to this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Blue BG for selected thread
+			if (confirm("Do you really want to add a \nBLUE background to this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "BGS" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Striped BG for all threads in selected forum
+			if (confirm("Do you really want to add a \nSTRIPED background to this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Striped BG for selected thread
+			if (confirm("Do you really want to add a \nSTRIPED background to this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "RES" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Reset background settings for selected forum
+			if (confirm("Do you really want to\nReset background settings\nfor this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				localStorage.removeItem($local_id);
+				console.log("localStorage LOG : " + $local_id + " is removed! ");
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Reset background settings for selected thread
+			if (confirm("Do you really want to\nReset background settings\nfor this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				localStorage.removeItem($local_id);
+				console.log("localStorage LOG : " + $local_id + " is removed! ");
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "DEL" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// REMOVE selected forum
+			if (confirm("Do you really want to\nREMOVE THIS FORUM\nfrom the results?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// REMOVE selected thread
+			if (confirm("Do you really want to\nREMOVE THIS THREAD\nfrom the results?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
 	};
 });				
 });
