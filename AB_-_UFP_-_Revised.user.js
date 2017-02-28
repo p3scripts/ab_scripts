@@ -94,26 +94,26 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 		if ($whattodo == "BGR") {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
 			};
 		} else if  ($whattodo == "BGG") {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(0,255,0,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(0,255,0,0.15),rgba(0,0,0,0))'});
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(0,255,0,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(0,255,0,0.15),rgba(0,0,0,0))'});
 			};
 		} else if  ($whattodo == "BGB") {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(0,0,255,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(0,0,255,0.15),rgba(0,0,0,0))'});
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().css({'background': '-moz-linear-gradient(left,rgba(0,0,255,0.15),rgba(0,0,0,0))'});
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(0,0,255,0.15),rgba(0,0,0,0))'});
 			};
 		} else if  ($whattodo == "BGS") {
 			if ($withthis == "for"){
@@ -412,14 +412,14 @@ $icon_solved ='<img style="margin:5px 5px -3px 0px" src="data:image/png;base64,i
       +--------------------------------------------------------------------------------------*/
 
 // Threads older than one week - BG [RED]
-$("td:contains('week')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'})
-$("td:contains('weeks')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'})
-$("td:contains('month')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'})
-$("td:contains('months')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'})
+$("td:contains('week')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'});
+$("td:contains('weeks')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'});
+$("td:contains('month')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'});
+$("td:contains('months')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'});
 	  
 // Announcements - BG [Red Gradient] and ICON
-$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background-color': 'rgba(225, 0, 0, 0.25)' , 'background': '-webkit-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' , 'background': '-o-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' , 'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' });
-//$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
+$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background-color': 'rgba(225, 0, 0, 0.25)'});
+$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background': 'linear-gradient(to right,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
 $("p:contains('Announcements')").prepend($icon_announce);
 
 // Games - ICON
