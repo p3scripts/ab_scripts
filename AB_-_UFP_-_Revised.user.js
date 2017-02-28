@@ -418,8 +418,8 @@ $("td:contains('month')").parent().children(':nth-child(3)').css({'background-co
 $("td:contains('months')").parent().children(':nth-child(3)').css({'background-color': 'rgba(225, 0, 0, 0.25)'})
 	  
 // Announcements - BG [Red Gradient] and ICON
-$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background-color': 'rgba(225, 0, 0, 0.25)'});// for any browser that doesn't do gradients
-$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
+$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background-color': 'rgba(225, 0, 0, 0.25)' , 'background': '-webkit-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' , 'background': '-o-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' , 'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))' });
+//$("td:first-child:contains('Announcements')").parent().children(':first-child').css({'background': '-moz-linear-gradient(left,rgba(255,0,0,0.15),rgba(0,0,0,0))'});
 $("p:contains('Announcements')").prepend($icon_announce);
 
 // Games - ICON
