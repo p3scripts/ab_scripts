@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.2
+// @version 		1.2.1
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -35,7 +35,7 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$versionnumber = (' V1.2')
+$versionnumber = (' V1.2.1')
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
 $(".thin").after(' \
@@ -96,22 +96,22 @@ $("#cdown").after('<div id="help" style="overflow-y:auto; margin:10px; backgroun
 						<h3>UFP - Revised'+$versionnumber+'</h3> \
 						<p style="text-align: justify; margin:5px;"> \
 							You can use this script to highlight the forums or threads you are interested in and \
-							hide unwanted ones or entire forums in a few steps. For now, you can choose three different \
-							colors (red, green, blue) and one image background (stripes) to custmize your results on the \
-							page. Choosing a background for a forum will create a background in the first cell of the \
-							selected row and by choosing a background to a thread will create it in the second one. You \
-							can remove backgrounds by using the reset option.</p> \
-							<p style="text-align: justify; margin:5px;"> \
-							As you can see, there is a reload timer on the top of the page. On the first run of the script, \
-							it will automatically set the reload frequency to 2 minutes and by modifying the value in the \
-							input field, it will start using the newly set value after the next reload of the page. The minimum \
-							value is 1 minute, the maximum is 30 minutes.</p> \
+							hide unwanted ones or entire forums in a few steps. For now, you can choose from four \
+							different colors and one image background to customize your results on the \
+							page. Choosing a background for a forum will create a background in the first cell of \
+							the selected row and by choosing a background to a thread will create it in the second \
+							one. You can remove backgrounds by using the reset option.</p> \
+						<p style="text-align: justify; margin:5px;"> \
+							As you can see, there is a reload timer above the top-right corner of the table. By \
+							clicking on the clock button you can modify the reload frequency in the input field \
+							and the script will start using the newly set value after the next reload of the page. \
+							The minimum value is 1 minute, the maximum is 30 minutes.</p> \
 						<p style="text-align: justify; margin:5px;"> \
 							In the second column of the results, all the links (thread titles and last read post links) \
 							are modified. A simple left-click will open them on a new tab.</p> \
 						<p style="text-align: justify; margin:5px;">Since the removed threads and forums won&#39;t \
 							appear in the results anymore, you can&#39;t use the drop-down menu to restore your changes. \
-							You can see the list of removed threads and forums, by clicking the text below</p></div> \
+							You can see the list of removed threads and forums, by clicking the restore button.</p></div> \
 						<div id="results" style=" margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:250px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_results+'; top:'+$ver_pos_help+';"> \
 							<h3>Removed results</h3> \
 							<p style="text-align: justify; margin:5px;"> \
