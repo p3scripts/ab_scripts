@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.1
+// @version 		1.2
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -35,17 +35,17 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$("h2").remove();													// Remove original <h2>
+$versionnumber = (' V1.2')
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
-$(".thin").prepend(' \
+$(".thin").after(' \
 <center> \
-	<div id="cdown"> \
-		<h2>Unread Forum Posts</h2> \
+	<div> \
+		<div id="cdown"></div> \
 	</div> \
-	<h3> \
-		<div>Change the reload frequency to <input id="timerinput" style="width:35px;height:16px;font-size:12px;font-weight:bold;" type="number" value="'+localStorage.getItem('timer')+'" min="1" max="30"> minute(s).</div><br> \
-	</h3> \
+	<h4> \
+		<div id="frequency">Set reload frequency to <input id="timerinput" style="width:35px;height:16px;font-size:12px;font-weight:bold;" type="number" value="'+localStorage.getItem('timer')+'" min="1" max="30"> minute(s).</div> \
+	</h4> \
 </center>');														// New DIV where the timer goes, and <h3> where you can set the time.
 $("#timerinput").change(function(){									// On input change...
 	localStorage.setItem('timer',this.value);						// Set timer in localSorage to the value of the input field.
@@ -60,15 +60,30 @@ var timerId = setInterval(function(){
 		window.location.reload(1);
 		clearInterval(timerId);
 	} else {
-		$("#cdown").html("<h2>Unread Forum Posts - Next reload in " + min + "m " + sec + "s</h2>");
+		$("#cdown").html("<h3>Next reload in " + min + "m " + sec + "s</h3>");
 	}
 }, 1000);
 console.log("Reload timer [WORKS]");
 
-$hor_pos = $(".colhead").position().left + $(".colhead").width() +'px';			// Offset of the right side of .colhead
-$hor_pos_2 = $(".colhead").position().left + $(".colhead").width() + 50 +'px';	// +50px for the about div
-$ver_pos = $(".colhead").position().top + 'px';									// Offset of the top of .colhead
-$("h3").after('<div style="opacity:0.65; position:absolute; left:'+$hor_pos+'; top:'+$ver_pos+';"><img style="" src="data:image/png;base64,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"></img></div>');
+$bg = $("body").css('background-color');											// body bg color value
+$border_width = $("h2").css('border-top-width');									// h2 border width value
+$border_style = $("h2").css('border-top-style');									// h2 border style value
+$border_color = $("h2").css('border-top-color');									// h2 border color value
+$border_radius = $("h2").css('border-top-left-radius');								// h2 border radius
+$h2style = ($border_width+" "+$border_style+" "+$border_color);						// h2 border styling all in one
+$hor_pos = $(".colhead").position().left + $(".colhead").width() + 'px';			// Offset of the right side of .colhead
+$ver_pos = $(".colhead").position().top + 'px';										// Offset of the top of .colhead
+$ver_pos_cdown = parseInt($ver_pos) - 20 + 'px';									// Timer Vpos
+$hor_pos_cdown = $(".colhead").position().left + 'px';								// Timer Hpos
+$hor_pos_help = $(".colhead").position().left + 'px';								// Help Hpos
+$ver_pos_help = $(".colhead").next().position().top + 'px';							// Help Vpos
+$hor_pos_results = $(".colhead").position().left + 360 + 'px';						// Results Hpos
+$hor_pos_timeset = $(".colhead").position().left + 620 + 'px';						// Set timer Hpos
+$hor_help_time_res = $(".colhead").children(":nth-child(3)").width() - 160 + 'px';
+$("#cdown").css({'position':'absolute', 'right':''+$hor_pos_cdown+'','top':''+$ver_pos_cdown+'','opacity':'0.45',});
+$("#frequency").css({'margin':'10px', 'padding':'10px 5px', 'width':'270px', 'border-radius':''+$border_radius+'', 'position':'absolute', 'left':''+$hor_pos_timeset+'','top':''+$ver_pos_help+'','display':'none','background-color':''+$bg+'', 'border':''+$h2style+'', 'box-shadow':'2px 3px 3px #000',});
+$("#cdown").after('<div style="opacity:0.65; position:absolute; left:'+$hor_pos+'; top:'+$ver_pos+';"><img style="" src="data:image/png;base64,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"></img></div>');
+$(".version").prepend('UFP - Rev'+$versionnumber+' - by psyntax3rr0r<br>');
 
       /*--------------------------------------------------------------------------------------+
       ||||||||||||||||||||||||||||||||||||||| FILTER ||||||||||||||||||||||||||||||||||||||||||
@@ -77,10 +92,34 @@ $("h3").after('<div style="opacity:0.65; position:absolute; left:'+$hor_pos+'; t
       |                       based on the values stored in localStorage.                     |
       +--------------------------------------------------------------------------------------*/
 
-$("h3").after('<div id="help" style="padding:5px 0px 5px 0px; border:1px solid rgba(0, 0, 0, 0.25); width:300px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_2+'; top:'+$ver_pos+';"><h3>UFP - Revised V1.0</h3><p style="text-align: justify; margin:5px;">You can use this script to highlight the forums or threads you are interested in and hide unwanted ones or entire forums in a few steps. For now, you can choose three different colors (red, green, blue) and one image background (stripes) to custmize your results on the page. Choosing a background for a forum will create a background in the first cell of the selected row and by choosing a background to a thread will create it in the second one. You can remove backgrounds by using the reset option.</p><p style="text-align: justify; margin:5px;">As you can see, there is a reload timer on the top of the page. On the first run of the script, it will automatically set the reload frequency to 2 minutes and by modifying the value in the input field, it will start using the newly set value after the next reload of the page. The minimum value is 1 minute, the maximum is 30 minutes.</p><p style="text-align: justify; margin:5px;">In the second column of the results, all the links (thread titles and last read post links) are modified. A simple left-click will open them on a new tab.</p><p style="text-align: justify; margin:5px;">Since the removed threads and forums won&#39;t appear in the results anymore, you can&#39;t use the drop-down menu to restore your changes. You can see the list of removed threads and forums, by clicking the text below</p><h4 id="results_btn" style="cursor:pointer;">Show / Hide removed results</h4><div id="results" style="padding:5px; display:none; text-align:left;"><p style="text-align: justify;">If you&#39;re not sure what are these numbers, you can go to the associated thread or forum by clicking them.</p><br><ul id="res_tab"><li style="list-style-type:none;"><h4>Removed results</h4></li></ul></div></div></div>');
-
-$("#results_btn").click(function(){$("#results").toggle();});	
-	  
+$("#cdown").after('<div id="help" style="overflow-y:auto; margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:350px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_help+'; top:'+$ver_pos_help+';"> \
+						<h3>UFP - Revised'+$versionnumber+'</h3> \
+						<p style="text-align: justify; margin:5px;"> \
+							You can use this script to highlight the forums or threads you are interested in and \
+							hide unwanted ones or entire forums in a few steps. For now, you can choose three different \
+							colors (red, green, blue) and one image background (stripes) to custmize your results on the \
+							page. Choosing a background for a forum will create a background in the first cell of the \
+							selected row and by choosing a background to a thread will create it in the second one. You \
+							can remove backgrounds by using the reset option.</p> \
+							<p style="text-align: justify; margin:5px;"> \
+							As you can see, there is a reload timer on the top of the page. On the first run of the script, \
+							it will automatically set the reload frequency to 2 minutes and by modifying the value in the \
+							input field, it will start using the newly set value after the next reload of the page. The minimum \
+							value is 1 minute, the maximum is 30 minutes.</p> \
+						<p style="text-align: justify; margin:5px;"> \
+							In the second column of the results, all the links (thread titles and last read post links) \
+							are modified. A simple left-click will open them on a new tab.</p> \
+						<p style="text-align: justify; margin:5px;">Since the removed threads and forums won&#39;t \
+							appear in the results anymore, you can&#39;t use the drop-down menu to restore your changes. \
+							You can see the list of removed threads and forums, by clicking the text below</p></div> \
+						<div id="results" style=" margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:250px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_results+'; top:'+$ver_pos_help+';"> \
+							<h3>Removed results</h3> \
+							<p style="text-align: justify; margin:5px;"> \
+							If you&#39;re not sure what are these numbers, you can go to the associated thread or forum by clicking them.</p><br> \
+							<div style="height:300px; padding:5px 5px 5px 5px; overflow-y:auto;"><ul id="res_tab" style="text-align:left;"><li style="list-style-type:none;"><h4></h4></li></ul> \
+						</div> \
+					');
+					
 $bg_stripes = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAACXBIWXMAAAsTAAALEwEAmpwYAAADGGlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjaY2BgnuDo4uTKJMDAUFBUUuQe5BgZERmlwH6egY2BmYGBgYGBITG5uMAxIMCHgYGBIS8/L5UBFTAyMHy7xsDIwMDAcFnX0cXJlYE0wJpcUFTCwMBwgIGBwSgltTiZgYHhCwMDQ3p5SUEJAwNjDAMDg0hSdkEJAwNjAQMDg0h2SJAzAwNjCwMDE09JakUJAwMDg3N+QWVRZnpGiYKhpaWlgmNKflKqQnBlcUlqbrGCZ15yflFBflFiSWoKAwMD1A4GBgYGXpf8EgX3xMw8BSMDVQYqg4jIKAUICxE+CDEESC4tKoMHJQODAIMCgwGDA0MAQyJDPcMChqMMbxjFGV0YSxlXMN5jEmMKYprAdIFZmDmSeSHzGxZLlg6WW6x6rK2s99gs2aaxfWMPZ9/NocTRxfGFM5HzApcj1xZuTe4FPFI8U3mFeCfxCfNN45fhXyygI7BD0FXwilCq0A/hXhEVkb2i4aJfxCaJG4lfkaiQlJM8JpUvLS19QqZMVl32llyfvIv8H4WtioVKekpvldeqFKiaqP5UO6jepRGqqaT5QeuA9iSdVF0rPUG9V/pHDBYY1hrFGNuayJsym740u2C+02KJ5QSrOutcmzjbQDtXe2sHY0cdJzVnJRcFV3k3BXdlD3VPXS8Tbxsfd99gvwT//ID6wIlBS4N3hVwMfRnOFCEXaRUVEV0RMzN2T9yDBLZE3aSw5IaUNak30zkyLDIzs+ZmX8xlz7PPryjYVPiuWLskq3RV2ZsK/cqSql01jLVedVPrHzbqNdU0n22VaytsP9op3VXUfbpXta+x/+5Em0mzJ/+dGj/t8AyNmf2zvs9JmHt6vvmCpYtEFrcu+bYsc/m9lSGrTq9xWbtvveWGbZtMNm/ZarJt+w6rnft3u+45uy9s/4ODOYd+Hmk/Jn58xUnrU+fOJJ/9dX7SRe1LR68kXv13fc5Nm1t379TfU75/4mHeY7En+59lvhB5efB1/lv5dxc+NH0y/fzq64Lv4T8Ffp360/rP8f9/AA0ADzT6lvFdAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAlSURBVHjaYvzPwMDAwBDhwAShGA4wQSgGBuYbDgwHGBgYGAADAG2KBij4Y4FWAAAAAElFTkSuQmCC)';
 console.log("\n+-- Filter");
 for ( var i = 0, len = localStorage.length; i < len; ++i ) {
@@ -114,6 +153,14 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(0,0,255,0.15),rgba(0,0,0,0))'});
+			};
+		} else if  ($whattodo == "BGY") {
+			if ($withthis == "for"){
+				$realid = "forumid=" + $idnumber;
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(255,255,0,0.25),rgba(0,0,0,0))'});
+			} else if ($withthis = "thr"){
+				$realid = "threadid=" + $idnumber;
+				$('a[href$="' + $realid + '"]').parent().parent().css({'background': 'linear-gradient(to right,rgba(255,255,0,0.25),rgba(0,0,0,0))'});
 			};
 		} else if  ($whattodo == "BGS") {
 			if ($withthis == "for"){
@@ -155,7 +202,12 @@ console.log("Filter [WORKS]");
 	  
 $("tr").append('<td width="18px" style="padding:3px; border-left-width:0px" id="row_options"></td>');								// Append a cell to every row in the table.
 $icon_options_header ='<img id="opt_toggle" title="Show / Hide options" style="position:relative; top:3px; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAABuwAAAbsBOuzj4gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAALnSURBVHjajZNrSJNhFMfPu5nMvA2XjumWOkdeklBXipKBkReSJCRiH0qitIsi6URUAvFLDhSclqK4adGXgYXOOa+v67Y52Zb7kKi55ja6fDDdRdtsbXNvr8ZgiFg/eG7nPOf/nMPzPIBhGDxubY3aG//VRCLRtcnJyVGVWlXoswGKot1WqxUblUiERwV3dXWOrOpWseXlZe/ExPhWXV0dbV+gsbHxEjor86g1mt3BZ89zDwuuqak5hqIzns3NDWx4eFgLAEE+H7LXZWdnn4mNZY63tfEoGxsbuWw2ewH8qK6uruBwOP1JyUmg1+ststdoHIPOyFcolJoAwJmfn/+IIAjLYjPP9/f1KfF1ES76xidAi6ZVGkxG+KT7DFnn2BFxJ+PNFosFUcgVdIJvE57Jb3R6OrO2lquKjIqanpubKwGcnp6eE1mZmaeVSiXYt21gtVnhp91OfC+XzywtLa3vl+APngnh9p1yKZfLzTcZDfVOp7N1zbAW5HF7dm02245jx/FDp9OJZtHZZgwnAA6A27y4SDEzPk56ubiYPyaRAIlE8ojFYo5GoxHj/l3wgwCHwOPxMhISmIUDQgHkFxRCUYbZ3JCzeNYXfKRAe3t7Xgw9Rj0wKCSGhYVjxreVX1PpT6gX8lwNYzVIxpECfD7/Snh4mEwoEBASTyWD0WjsUSu0Q6qpXQ85zYtcvEteGOEGiMAPv5fWdaOD3+HNzsnC8DvHKioqXvl80REQL+8MdLq+sLBtLQsbeQiL3yRAwH1/M+jt7a2iUqkvXg4NIcHHQ4HBYCgEAsF13yHfzZhRNON6pFMYvM6tLci/RUvVvgP9ugwJRFAUJZtMJrlarVaQyeT7oaGhK83NzWm4ugsOUF6APODeIzyNCCYRQyIRWJlySIkhISH09PT0OiaTaXe73aSmpqa94F9wCCU3Wz7UVrXoUuLcVzGHxyvVQv1+jaWlpd1lZWWzFAqF+j/fmkWDpPOJkLI3/wPPj9GwXXoALAAAAABJRU5ErkJggg=="></img>';
+$icon_options_settimer ='<img id="opt_settimer" title="Set reload frequency" style="margin:-2px 2px -2px 2px; display:none; position:relative; top:2px; left:'+$hor_help_time_res+'; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmRJREFUeNqkU0trGlEUvjOOKVHHUaO0DpZIV32FxMCEvCSJuAhtwO5CQpJdsskuG7f9H9mZgiBdKKQluywiErSESGlxVQjUXusjdHxMxGfOmTrDlC666IHv3jvn3u+7Z845lxkOh+R/jMMhEokQlmWJyWQiDMPwgOfg9gGE0TkZ8B0u+wpo9Pt9MhgMSCqV+i1gsKc2u31tLhhcm5ufl7wejxedtFKh2cvLXPbi4rwhy+fgKvwRgUZ2eTxvtg8ODn1er89hsZDP19dkamaGTIqiX1hf9z+bnl6IHx8LZUqTmgiLA4Rlt/J8eHt//9Dpcvns4+Oq4lUup6ujD/d24AKIMowcXQD+6aUUDK7yDofPMjZGWIZRSe12WxdAH+7Z4MziysoqcnSBXq/nnwoEJFzX7+7ITbWqolAo6GsE7mHyApIkIUfPAXw4BYfjoXbbpNutzo1GQ1+r54BcvL0leBY5RgEWyzgwkF+FwyQUCpHdzU3C87wKm81GZpeWyMLyssoxCshNWS5bBOGxdls8kSA7W1vkXTyuR4AtJ3c6RKnXy8jRc9Dtdm8+ZTJ5DhoJw0QTXC6VjLMGSCB5ANXIptN55BirkP+QTKY7zSbtjwQ0EaNhAtl2m75PJNLI0QVg49fPUunsbTR6Itdq1MSyf/U8+hRZptGjoxNK6Rly0M/gY2KwxtB5Vqt1VhTFyO7e3uLrjY0Xj0RxAjuiRGnt4+npl1gslikWi6lWq3WlKApRuSMBTOYEwM1xnNNsNj+BhyUaHxOE/AP++9soeRVAFbg9TQBjtozA/eMF9wEtgALcwb0AAwCoRifZl32HrAAAAABJRU5ErkJggg=="></img>';
+$icon_options_help ='<img id="opt_help" title="Help" style="margin:-2px 2px -2px 2px; display:none; position:relative; top:2px; left:'+$hor_help_time_res+'; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKkSURBVDjLpZPdT5JhGMb9W+BPaK3matVqndXWOOigA6fmJ9DUcrUMlrN0mNMsKTUznQpq6pyKAm8CIogmypcg8GIiX8rHRHjhVbPt6o01nMvZWge/k3vP9duuZ/edAyDnf/hjoCMP2Vr3gUDj3CdV6zT1xZ6iFDaKnLEkBFOmPfaZArWT5sw60iFP+BAbOzTcQSqDZzsNRyCNkcVoaGghzDlVQKylOHJrMrUZ2Yf52y6kc36IxpyoH1lHF7EBgyMKV4jCJ5U/1UVscU4IZOYEa3I1HtwI01hwxlDLhDoJD/wxGr5YGmOLAdRIrVCuhmD3JdA6SQabx12srGB0KSpc86ew4olDOGjH4x4z0gdHDD9+c4TaQQtq+k2Yt0egXYugTmoVZgV9cyHSxXTtJjZR3WNCVfcK/NE0ppYDUNu2QTMCtS0IbrsOrVMOWL27eNJtJLOCDoWXdgeTEEosqPxoBK/TwDzWY9rowy51gJ1dGr2zLpS2aVH5QQ+Hbw88sZ7OClrGXbQrkMTTAQu4HXqUv9eh7J0OSfo7tiIU+GItilpUuM/AF2tg98eR36Q+FryQ2kjbVhximQu8dgPKxPMoeTuH4tfqDIWvCBQ2KlDQKEe9dBlGTwR36+THFZg+QoUxAL0jgsoOQzYYS+wjskcjTzSToVAkA7Hqg4Spc6tm4vgT+eIFVvmb+eCSMwLlih/cNg0KmpRoGzdl+BXOb5jAsMYNjSWAm9VjwesPR1knFilPNMu510CkdPZtqK1BvJQsoaRZjqLGaTzv1UNp9EJl9uNqxefU5QdDnFNX+Y5Qxrn9bDLUR6zjqzsMizeWYdG5gy6ZDbk8aehiuYRz5jHdeDTKvlY1IrhSMUxe4g9SuVwpdaFsgDxf2i84V9zH/us1/is/AdevBaK9Tb3EAAAAAElFTkSuQmCC"></img>';
+$icon_options_restore ='<img id="opt_restore" title="Restore removed results" style="margin:-2px 2px -2px 2px; display:none; position:relative; top:2px; left:'+$hor_help_time_res+'; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAB3klEQVQ4y43TW2jOARjH8c//ff/vu7PDnFaL0ORwMaaEC+VwocjKheRCKMWFO7kh5cIdblzSRHFhk7IkF7JpYdQ0coitaBNj1vRu3s3ew9/Na200+dVTT8/z9O3pOQQmqhlxs+QsFXgEdvinYqALTYiZa8A5P+xx3H8p5h0eImmxPhd9t09WkZf/C2hEhVofXTGgHsQtcNtygVKX0Tg1IHDdFr3OSlmlBOWYJqfcVyXeSOgQeCLvuVG95vipA0d+Ay65761N4qhAWcHKJ/hFMgJ9sjpl3MFds32QJu6gF6gxYjEIUSIvKSuUE5MXCTFd3lJZ22Rsl5ZT7GXcLn0WaRVZIG2ZvMA8LWY7Kuma0E2BeyKv5GSNqjKsyqiN+BbaiRY9ah1S7ItPDsvqsVmzp1iLbrShVin2G3TGkDKhraGgMM52A1Y6pthnSTMRiESgplDTKq3IYyPSUkpVioJJO3mNSELaDCP6JbGukGvDTDN0Oq/bXgkZK5wMJwFWgAz6x2PDuAAWaXfae7vFjal21XwNkzuYqAgPUKbYR/U+O2HQMhWeqtZgiRtShv8GtI97CayRckC/OhnPVLploYeafHcKcaYGRFZjgzFd6FSnz5C86j9PeWpAiBwi66f+hV+BC5dVOBoL5wAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxMS0wMy0zMFQyMzowNToxNC0wNzowMFR7eiwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTEtMDMtMzBUMjM6MDU6MTQtMDc6MDAlJsKQAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg=="></img>';
+
 $(".colhead").children(":last-child").html($icon_options_header);																	// Options ICON in header.
+$(".colhead").children(":nth-child(3)").append($icon_options_help + $icon_options_restore + $icon_options_settimer);				// Help, Restore and Timer ICONS in header
 $("tr").children(":first-child").css({'font-variant':'small-caps'});																// Make the forum links small-caps.
 $("tr").children(":first-child").next().children(":first-child").children(":first-child").each(function(){							// Find first thread link in second column of the table
 	$thr_id = this.href.match(/\d+/);																								// Put the first number from href (threadid) to a variable
@@ -179,6 +231,7 @@ $lastcell.html('<select class="tr_options" id="'+$thr_id+'"> \
 					<option id="FBGR'+$thr_id+'" title="Red background\nfor forum title." value="BGR'+$for_local+'">Red BG</option> \
 					<option id="FBGG'+$thr_id+'" title="Green background\nfor forum title." value="BGG'+$for_local+'">Green BG</option> \
 					<option id="FBGB'+$thr_id+'" title="Blue background\nfor forum title." value="BGB'+$for_local+'">Blue BG</option> \
+					<option id="FBGB'+$thr_id+'" title="Yellow background\nfor forum title." value="BGY'+$for_local+'">Yellow BG</option> \
 					<option id="FBGS'+$thr_id+'" title="Striped background\nfor forum title." value="BGS'+$for_local+'">Striped BG</option> \
 					<option id="RESF'+$thr_id+'" title="Disables background\nfor forum title." value="RES'+$for_local+'" style="font-size:12px;">&#9888; Reset</option> \
 					<option id="DELF'+$thr_id+'" title="Removes forum\nfrom the results." value="DEL'+$for_local+'" style="color:red;font-size:12px;">&#9888; Remove Forum</option> \
@@ -187,6 +240,7 @@ $lastcell.html('<select class="tr_options" id="'+$thr_id+'"> \
 					<option id="TBGR'+$thr_id+'" title="Red background\nfor thread title." value="BGR'+$thr_local+'">Red BG</option> \
 					<option id="TBGG'+$thr_id+'" title="Green background\nfor thread title." value="BGG'+$thr_local+'">Green BG</option> \
 					<option id="TBGB'+$thr_id+'" title="Blue background\nfor thread title." value="BGB'+$thr_local+'">Blue BG</option> \
+					<option id="TBGB'+$thr_id+'" title="Yellow background\nfor thread title." value="BGY'+$thr_local+'">Yellow BG</option> \
 					<option id="TBGS'+$thr_id+'" title="Striped background\nfor thread title." value="BGS'+$thr_local+'">Striped BG</option> \
 					<option id="REST'+$thr_id+'" title="Disables background\nfor thread title." value="RES'+$thr_local+'" style="font-size:12px;">&#9888; Reset</option> \
 					<option id="DELT'+$thr_id+'" title="Removes thread\nfrom the results." value="DEL'+$thr_local+'" style="color:red;font-size:12px;">&#9888; Remove Thread</option> \
@@ -236,6 +290,22 @@ $(".tr_options[id=" + $thr_id + "]").change(function(){
 			};
 		} else if ( this.value.substring(3, 6) == "thr" ) {		// Blue BG for selected thread
 			if (confirm("Do you really want to add a \nBLUE background to this thread?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		};
+	} else if ( this.value.substring(0, 3) == "BGY" ){
+		if ( this.value.substring(3, 6) == "for" ) {			// Blue BG for all threads in selected forum
+			if (confirm("Do you really want to add a \nYELLOW background to this forum?\n\nID=" +this.value.substring(6) )){
+				$local_id = this.value.substring(3);
+				$local_value = this.value;
+				localStorage.setItem($local_id,$local_value);
+				console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+			};
+		} else if ( this.value.substring(3, 6) == "thr" ) {		// Blue BG for selected thread
+			if (confirm("Do you really want to add a \nYELLOW background to this thread?\n\nID=" +this.value.substring(6) )){
 				$local_id = this.value.substring(3);
 				$local_value = this.value;
 				localStorage.setItem($local_id,$local_value);
@@ -294,7 +364,10 @@ $(".tr_options[id=" + $thr_id + "]").change(function(){
 
 $(".tr_options").css({ 'width':'18px', 'height' : '18px', 'background-color' : 'rgba(0, 0, 0, 0.25)', 'border' : 'none', 'color' : '#ffffff', 'padding' : '0px', 'text-align' : 'left', 'text-decoration' : 'none', 'display' : 'none',  'font-size' : '10px', 'cursor' : 'pointer' });
 
-$("#opt_toggle").click(function(){$(".tr_options").toggle();$("#help").toggle();});			// Show / Hide drop-down menus and about section by clicking the tools icon in .colhead
+$("#opt_toggle").click(function(){$(".tr_options").toggle();$("#opt_help").toggle();$("#opt_restore").toggle();$("#opt_settimer").toggle();});					// Show / Hide drop-down menus
+$("#opt_help").click(function(){$("#help").toggle();});
+$("#opt_restore").click(function(){$("#results").toggle();});
+$("#opt_settimer").click(function(){$("#frequency").toggle();});
 
 console.log("IDs & Options [WORKS]");
 
