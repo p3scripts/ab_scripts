@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.3.1
+// @version 		1.3.2
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -35,7 +35,7 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$versionnumber = (' V1.3.1')
+$versionnumber = (' V1.3.2')
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
 if(!localStorage.getItem('opacity')) { 								// Does opacity exists in localSorage?
@@ -183,12 +183,14 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 		} else if  ($whattodo == "DEL") {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().hide()
+				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
 				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewforum&'+$realid+'">'+$realid+'</href></li>');
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
 				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewthread&'+$realid+'">'+$realid+'</href></li>');
 			};
@@ -280,6 +282,22 @@ if ( $(".tr_options[id='" + $thr_id + "']").parent().prev().prev(":contains('\u2
 	$("option[id='WHTT"+$thr_id+"']").hide();
 } else {
 	$("option[id='RWHT"+$thr_id+"']").hide();
+};
+
+if ( $(".tr_options[id='" + $thr_id + "']").parent().prev().prev().prev(":contains('\u2718')").length > 0 ) {
+ 	$("option[id='FBGR"+$thr_id+"']").hide();
+	$("option[id='FBGG"+$thr_id+"']").hide();
+	$("option[id='FBGB"+$thr_id+"']").hide();
+	$("option[id='FBGY"+$thr_id+"']").hide();
+	$("option[id='FBGS"+$thr_id+"']").hide();
+	$("option[id='DELF"+$thr_id+"']").hide();
+	$("option[id='TBGR"+$thr_id+"']").hide();
+	$("option[id='TBGG"+$thr_id+"']").hide();
+	$("option[id='TBGB"+$thr_id+"']").hide();
+	$("option[id='TBGY"+$thr_id+"']").hide();
+	$("option[id='TBGS"+$thr_id+"']").hide();
+	$("option[id='RWHT"+$thr_id+"']").hide();
+	$("option[id='DELT"+$thr_id+"']").hide();
 };
 				
 $(".tr_options[id=" + $thr_id + "]").change(function(){
