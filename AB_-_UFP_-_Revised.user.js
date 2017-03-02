@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.3
+// @version 		1.3.1
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -35,22 +35,29 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$versionnumber = (' V1.3')
+$versionnumber = (' V1.3.1')
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
+if(!localStorage.getItem('opacity')) { 								// Does opacity exists in localSorage?
+	localStorage.setItem('opacity','0.45');};						// If not, set the opacity value to 0.45 (default).
 $(".thin").after(' \
 <center> \
 	<div> \
 		<div id="cdown"></div> \
 	</div> \
 	<h4> \
-		<div id="frequency">Set reload frequency to <input id="timerinput" style="width:35px;height:16px;font-size:12px;font-weight:bold;" type="number" value="'+localStorage.getItem('timer')+'" min="1" max="30"> minute(s).</div> \
+		<div id="frequency">Set reload frequency to <input id="timerinput" style="width:35px; height:16px; font-size:12px; font-weight:bold;" type="number" value="'+localStorage.getItem('timer')+'" min="1" max="30"> minute(s). \
+		<div style="margin:5px;">Opacity <input id="timeropacity" type="range" id="myRange" step="0.01" value="'+localStorage.getItem('opacity')+'" min="0" max="1" style="width:200px; position:relative; top:4px;"></div></div> \
 	</h4> \
 </center>');														// New DIV where the timer goes, and <h3> where you can set the time.
 $("#timerinput").change(function(){									// On input change...
 	localStorage.setItem('timer',this.value);						// Set timer in localSorage to the value of the input field.
 	console.log("Countdown set to "+this.value+" minute(s)");});	// Console log on timer settings.
-console.log("Setting the timer [WORKS]");
+$("#timeropacity").change(function(){								// On input change...
+	localStorage.setItem('opacity',this.value);						// Set opacity in localSorage to the value of the input slider.
+	console.log("Opacity of the timer is set to "+this.value);});	// Console log on timer opacity settings.
+$cd_opacity = localStorage.getItem('opacity');
+console.log("Setting the timer & timer opacity [WORKS]");
 var countdown = localStorage.getItem('timer') * 60 * 1000;			// Reload page every 2 minutes (default), countdown timer included.
 var timerId = setInterval(function(){
 	countdown -= 1000;
@@ -78,9 +85,8 @@ $hor_pos_cdown = $(".colhead").position().left + 'px';								// Timer Hpos
 $hor_pos_help = $(".colhead").position().left + 'px';								// Help Hpos
 $ver_pos_help = $(".colhead").next().position().top + 'px';							// Help Vpos
 $hor_pos_results = $(".colhead").position().left + 360 + 'px';						// Results Hpos
-$hor_pos_timeset = $(".colhead").position().left + 620 + 'px';						// Set timer Hpos
-$("#cdown").css({'position':'absolute', 'right':''+$hor_pos_cdown+'','top':''+$ver_pos_cdown+'','opacity':'0.45',});
-$("#frequency").css({'margin':'10px', 'padding':'10px 5px', 'width':'270px', 'border-radius':''+$border_radius+'', 'position':'absolute', 'left':''+$hor_pos_timeset+'','top':''+$ver_pos_help+'','display':'none','background-color':''+$bg+'', 'border':''+$h2style+'', 'box-shadow':'2px 3px 3px #000',});
+$("#cdown").css({'position':'absolute', 'right':''+$hor_pos_cdown+'','top':''+$ver_pos_cdown+'','opacity':''+$cd_opacity+'',});
+$("#frequency").css({'margin':'10px', 'padding':'10px 5px', 'width':'270px', 'border-radius':''+$border_radius+'', 'position':'absolute', 'right':''+$hor_pos_cdown+'','top':''+$ver_pos_help+'','display':'none','background-color':''+$bg+'', 'border':''+$h2style+'', 'box-shadow':'2px 3px 3px #000',});
 $("#cdown").after('<div style="opacity:0.65; position:absolute; left:'+$hor_pos+'; top:'+$ver_pos+';"><img style="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAC9CAYAAADfnA8uAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4YSRudE8o9VGjUYPjGnGXOMk423GbcajJgYmISZLTepN7ppSTbmmKaY7TDtMx83MzaLN1pk1mz0x1zLnm+eb15vft2BaeFostqi2uGVJsuRaplnutrxuhVo5WaVYVVpds0atna0l1rutu6cRp7lOk06rntZnw7Dxtsm2qbcZsOXYBtuutm22fWFnYhdnt8Wuw+6TvZN9un2N/T0HDYfZDqsdWh1+c7RyFDpWOt6azpzuP33F9JbpL2dYzxDP2DPjthPLKcRpnVOb00dnF2e5c4PziIuJS4LLLpc+Lpsbxt3IveRKdPVxXeF60vWdm7Obwu2o26/uNu5p7ofcn8w0nymeWTNz0MPIQ+BR5dE/C5+VMGvfrH5PQ0+BZ7XnIy9jL5FXrdewt6V3qvdh7xc+9j5yn+M+4zw33jLeWV/MN8C3yLfLT8Nvnl+F30N/I/9k/3r/0QCngCUBZwOJgUGBWwL7+Hp8Ib+OPzrbZfay2e1BjKC5QRVBj4KtguXBrSFoyOyQrSH355jOkc5pDoVQfujW0Adh5mGLw34MJ4WHhVeGP45wiFga0TGXNXfR3ENz30T6RJZE3ptnMU85ry1KNSo+qi5qPNo3ujS6P8YuZlnM1VidWElsSxw5LiquNm5svt/87fOH4p3iC+N7F5gvyF1weaHOwvSFpxapLhIsOpZATIhOOJTwQRAqqBaMJfITdyWOCnnCHcJnIi/RNtGI2ENcKh5O8kgqTXqS7JG8NXkkxTOlLOW5hCepkLxMDUzdmzqeFpp2IG0yPTq9MYOSkZBxQqohTZO2Z+pn5mZ2y6xlhbL+xW6Lty8elQfJa7OQrAVZLQq2QqboVFoo1yoHsmdlV2a/zYnKOZarnivN7cyzytuQN5zvn//tEsIS4ZK2pYZLVy0dWOa9rGo5sjxxedsK4xUFK4ZWBqw8uIq2Km3VT6vtV5eufr0mek1rgV7ByoLBtQFr6wtVCuWFfevc1+1dT1gvWd+1YfqGnRs+FYmKrhTbF5cVf9go3HjlG4dvyr+Z3JS0qavEuWTPZtJm6ebeLZ5bDpaql+aXDm4N2dq0Dd9WtO319kXbL5fNKNu7g7ZDuaO/PLi8ZafJzs07P1SkVPRU+lQ27tLdtWHX+G7R7ht7vPY07NXbW7z3/T7JvttVAVVN1WbVZftJ+7P3P66Jqun4lvttXa1ObXHtxwPSA/0HIw6217nU1R3SPVRSj9Yr60cOxx++/p3vdy0NNg1VjZzG4iNwRHnk6fcJ3/ceDTradox7rOEH0x92HWcdL2pCmvKaRptTmvtbYlu6T8w+0dbq3nr8R9sfD5w0PFl5SvNUyWna6YLTk2fyz4ydlZ19fi753GDborZ752PO32oPb++6EHTh0kX/i+c7vDvOXPK4dPKy2+UTV7hXmq86X23qdOo8/pPTT8e7nLuarrlca7nuer21e2b36RueN87d9L158Rb/1tWeOT3dvfN6b/fF9/XfFt1+cif9zsu72Xcn7q28T7xf9EDtQdlD3YfVP1v+3Njv3H9qwHeg89HcR/cGhYPP/pH1jw9DBY+Zj8uGDYbrnjg+OTniP3L96fynQ89kzyaeF/6i/suuFxYvfvjV69fO0ZjRoZfyl5O/bXyl/erA6xmv28bCxh6+yXgzMV70VvvtwXfcdx3vo98PT+R8IH8o/2j5sfVT0Kf7kxmTk/8EA5jz/GMzLdsAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAA4tJREFUeNrsnb1v2zAQxZ9VovDAQSg8BIUHDx48FEWGjh3y/08ZOnjI4MEohMCDBqHQoKGDyeai6pukxNjvAUacGKZ+PJLHO4pUVgCeEKESRCqCEYxgBPvoYCsPZSgAP1s+O5lXm34A0KEslnZ8tun4bN0GZS22c7CU7gEDgAJADqCqQaXmZ2vhu8DdRXdZhqPSk6pYwYpYwS6+wS4+mhFA5hvsDCBzLOMIoFIeoU7GX5XGsaoJlvplysAnD36sNLX8LS7wasDWA0Z+bix9BPBHev7UEaocOEM0WagARVHUjcrVwQaTAvDICJZgBCMYwe4IrC+TyQE8d3ye9swcJ7Svjz12TYdsSoJxVE5U0TNqy57vTo5gmcZT1BJ5ZYwuTC8JpvF2o2uNt/tLs1jMLnNq8z4VELM0ZSog/qt96D62rpleD629L7C0pQlmH5X70LWf2jm3jMcIFnEE61u5jW7nApORcC7C7rItSlaeLibfyztyBd7vt5ilKaXjrURZEkwJsHyJPjZmdhhkabXQgJOV2NCPEWwpsDxGsFVHkKiWjNOmhtYqdHTrM0vyau258srR1o4lE2+yNkVR1FAH+8Swh2AEIxjB7ggs2j2KFEVRtxBaN8muM2jxu1wcKQC8DCh/Yxx4PfWXK9S5Ke/dKbD6qvUDrueUXNfDtqYc1VFxe41UwB4hDkxZHXoKkyrRfJRMAfgO4OuEeVgZw5QQpwUP5o+uOniYe/cA1okpyAfUFt2HicdY7pCYWrpKm5r6Upp46OjKU+W8B4o7BFgBdAVLEWgXQhJbE7Y5WKkz2s/kVnZYj7jWxcwWZa0b7MaCndB+23g70sVccD0GW1c2Bexgvtj0DIExUHaq2TcMEj2lKTeeHOaLqdyQByrMlldeMPHseEiwyjRhdJn4ERP3XIQEO8Pt+H+ZwP2Ifl35wOi2S6dEjBofKlr81dgBkyWunbQG9exYydyyqJpnHjvN2NF3Nq8pUKVIRrKuLElmNqg5xd7spieYVDXrUBRF3az4LIKYAkWCEYxgBLtrMD6LgH2MYB9tVPaJzyKgKIpiJs5JnGAEIxjBPm7MP3Qfooua9mL0gmk4PORgoNZTs6RvuN6PDJGQbLuu3weWLhV9cFTeClge9b/zyCMEy0JsoXFuRmuxDPEsnPzbNWM3gb8C+ALg85L9CtclrdKmb1IPuO5U0ZjnURKN22cA4O8Al3y5GrJ3V1UAAAAASUVORK5CYII="></img></div>');
 $(".version").prepend('UFP - Revised '+$versionnumber+' - <a title="psyntax3rr0r&#39;s profile" alt="psyntax3rr0r&#39;s profile" target="_blank" href="https://animebytes.tv/user.php?id=43298">psyntax3rr0r<a><br>');
 
@@ -90,8 +96,11 @@ $(".version").prepend('UFP - Revised '+$versionnumber+' - <a title="psyntax3rr0r
       |                       This part of the script does the dirty work                     |
       |                       based on the values stored in localStorage.                     |
       +--------------------------------------------------------------------------------------*/
+$icon_options_settimer2 ='<img id="opt_settimer" title="Set reload frequency" style="margin:-2px; position:relative; top:2px; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmRJREFUeNqkU0trGlEUvjOOKVHHUaO0DpZIV32FxMCEvCSJuAhtwO5CQpJdsskuG7f9H9mZgiBdKKQluywiErSESGlxVQjUXusjdHxMxGfOmTrDlC666IHv3jvn3u+7Z845lxkOh+R/jMMhEokQlmWJyWQiDMPwgOfg9gGE0TkZ8B0u+wpo9Pt9MhgMSCqV+i1gsKc2u31tLhhcm5ufl7wejxedtFKh2cvLXPbi4rwhy+fgKvwRgUZ2eTxvtg8ODn1er89hsZDP19dkamaGTIqiX1hf9z+bnl6IHx8LZUqTmgiLA4Rlt/J8eHt//9Dpcvns4+Oq4lUup6ujD/d24AKIMowcXQD+6aUUDK7yDofPMjZGWIZRSe12WxdAH+7Z4MziysoqcnSBXq/nnwoEJFzX7+7ITbWqolAo6GsE7mHyApIkIUfPAXw4BYfjoXbbpNutzo1GQ1+r54BcvL0leBY5RgEWyzgwkF+FwyQUCpHdzU3C87wKm81GZpeWyMLyssoxCshNWS5bBOGxdls8kSA7W1vkXTyuR4AtJ3c6RKnXy8jRc9Dtdm8+ZTJ5DhoJw0QTXC6VjLMGSCB5ANXIptN55BirkP+QTKY7zSbtjwQ0EaNhAtl2m75PJNLI0QVg49fPUunsbTR6Itdq1MSyf/U8+hRZptGjoxNK6Rly0M/gY2KwxtB5Vqt1VhTFyO7e3uLrjY0Xj0RxAjuiRGnt4+npl1gslikWi6lWq3WlKApRuSMBTOYEwM1xnNNsNj+BhyUaHxOE/AP++9soeRVAFbg9TQBjtozA/eMF9wEtgALcwb0AAwCoRifZl32HrAAAAABJRU5ErkJggg=="></img>';
+$icon_options_restore2 ='<img id="opt_restore" title="View removed results" style="margin:-2px; position:relative; top:2px; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACnUlEQVQ4jYWSS2xMYRiGn/+f/58zZ2Zo9aJSt1ONS6RYuKaJiGBBwkikEaVsxFaIREIQwYaFxMKGhcQtNqUVC3GJIEgQqTsZnLauVdNRptPpnHN+C5lJlcS7/d7nzZvv+wT/0NoWt9o3LAZqAR9IhgRXTyecrqFeMQQc6RsOAY2AGuIdAE4owfZTCSf9V0BjizslMFwBxvyr1SAlpWDJmYTjFgPWtbqlXsAjwPkPXNBzLcXskyvG9ykAL2DXYHhapcXCsXFqSjQGeJMe4Fp7hhepXKHyVC8wW4H9oqm1PZIPzBdgeFQJNs4oY2aVzfPufq53ZLCVYH3dCJSAux+znHjaQ843AJ9jWo6WXmDmAMNLLcmu+pHMrLJ5lcpx4PITWg7vZKDtCloKhBDUj46yY14lMS0BRmW9oE4acKyQYNvsSqrjGoBb7zN8vXqS7Ns2bl5q5n7bM9q6sgA4JWG2zipHCQgM4yQQ+IEh4wXFDZWGQ1TEbQA6OzvYc/wcL1MDxbmbytCZ7sUYgxKQ9AwcftDNllkVTCmzWOLE6Vm9iWZPggxRvaiRBWOjANx418O+2x1EwmHSfX1JseFiu8r55hNQERKQmBBh+aRyPvzwuNH5EykEC8fFqIoqjj38wKln3cSsMLbW7qi4rhEAay64uw3s/X3SAC/3nWW1I6iriBMYeNz1k/Ovv/E9D1GtsbUmotXm8w0TjygAJcXBfGBWAdOVlGCVcOTRZ3L5PFpKwiGFpVQRtsP6Xkyro8VPBFjb4o7xDZeBqYUmbuobnh9gKYWtivADS6mlZ1c63QCyEHA64bzXUswFDgK9SkpqysoZZkWwlSaiVTqi1R5bqfkF+I8Gg9XU2h71AlNvYILn+/T2Z5PxsL7T3DC5f6j3F/Zl9lJ4oplxAAAAAElFTkSuQmCC"></img>';
+$icon_options_save2 ='<img id="opt_save" title="Save settings..." style="margin:-2px 2px -2px 2px; src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU9JREFUeNpi9K3Y28fAwJACxAwWWqIsDESAE9de/4Ey57D8+/svRclAjRfEq4qSI0Y/Q96yR2D63oVbKUz//v5lIBeA9LL8/fOX4c+ff3DBu69/Mtx59ROrBhUxdgZlUXa4epBelj9//jD8RjIApACE8QGYepBelr+//zD8+v2XJBfA1IP0svxBM4AYF8DUg/Qy/fkFNODXXzDefek9wYADqYGpB+kFuuA3w89fkGiduO0RGBMLQHrBXvj5i7yo/AMOA6gXYKA7SopBWZwNq4a7L38xxGWtYBC3sYMY8AtbIAI1O2XuArP3TXdDMQBmMHIgYkQjOHr+/SMqFv6CY+HPnznvTp/4DEocsAQC0o/PDJhaUEJiun+4uAiYJOd8OH38MyyJHp7tAcY4Aw+s+R8kKUMzRRGI/nTmWMqs5T/xpqIv3379ZDhzDMadAxBgALae7bsNa2kaAAAAAElFTkSuQmCC"></img>';
 
-$("#cdown").after('<div id="help" style="overflow-y:auto; margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:350px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_help+'; top:'+$ver_pos_help+';"> \
+$("#cdown").after('<div id="help" style="overflow-y:auto; margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:450px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_help+'; top:'+$ver_pos_help+';"> \
 						<h3>UFP - Revised'+$versionnumber+'</h3> \
 						<p style="text-align: justify; margin:5px;"> \
 							You can use this script to highlight the forums or threads you are interested in and \
@@ -102,15 +111,17 @@ $("#cdown").after('<div id="help" style="overflow-y:auto; margin:10px; backgroun
 							one. You can remove backgrounds by using the reset option.</p> \
 						<p style="text-align: justify; margin:5px;"> \
 							As you can see, there is a reload timer above the top-right corner of the table. By \
-							clicking on the clock button you can modify the reload frequency in the input field \
-							and the script will start using the newly set value after the next reload of the page. \
-							The minimum value is 1 minute, the maximum is 30 minutes.</p> \
+							clicking on the '+$icon_options_settimer2+' icon you can modify the reload frequency as well as its opacity \
+							and the script will start using the newly set values after the next reload of the page.</p> \
 						<p style="text-align: justify; margin:5px;"> \
-							In the second column of the results, all the links (thread titles and last read post links) \
+							In the second column of the results, all the links (thread and last read post links) \
 							are modified. A simple left-click will open them on a new tab.</p> \
-						<p style="text-align: justify; margin:5px;">Since the removed threads and forums won&#39;t \
-							appear in the results anymore, you can&#39;t use the drop-down menu to restore your changes. \
-							You can see the list of removed threads and forums, by clicking the restore button.</p></div> \
+						<p style="text-align: justify; margin:5px;">Removed threads and forums won&#39;t \
+							appear in the results anymore, but you can toggle between the filtered and removed \
+							results by clicking the '+$icon_options_restore2+' icon. If you removed a forum / subforum, you can&#39;t \
+							restore a single thread in it, but you can add it to the whitelist and it will appear \
+							in the results even if the associated forum was removed. You can restore forums by \
+							using the reset option.</p></div> \
 						<div id="results" style=" margin:10px; background-color:'+$bg+'; padding:5px 0px 5px 0px; border:'+$h2style+'; border-radius:'+$border_radius+'; width:250px; height:450px; display:none; box-shadow: 2px 3px 3px #000; position:absolute; left:'+$hor_pos_results+'; top:'+$ver_pos_help+';"> \
 							<h3>Removed results</h3> \
 							<p style="text-align: justify; margin:5px;"> \
@@ -173,15 +184,18 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewforum&'+$realid+'">'+$realid+'</href></li>');
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewthread&'+$realid+'">'+$realid+'</href></li>');
 			};
 		};
 	};
 };
+console.log("+---------------- [WORKS]\n ");
 
 for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 $storedvalue = localStorage.getItem( localStorage.key( i ) );
@@ -198,9 +212,6 @@ $("[id*='_whichwasremoved']").click(function(){
 	localStorage.removeItem($torestore);
 	console.log("localStorage LOG : " + $torestore + "is restored!");
 });
-console.log("+--\n ");
-
-console.log("Filter [WORKS]");
 
       /*--------------------------------------------------------------------------------------+
       ||||||||||||||||||||||||||||||||| THREAD & FORUM IDS ||||||||||||||||||||||||||||||||||||
@@ -215,7 +226,8 @@ $hor_htr = $(".colhead").children(":nth-child(4)").position().left - 65 + 'px';	
 $ver_htr = $("#opt_toggle").position().top + 'px';																					// Help, Restore and Timer ICON Vpos
 $icon_options_settimer ='<img id="opt_settimer" title="Set reload frequency" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmRJREFUeNqkU0trGlEUvjOOKVHHUaO0DpZIV32FxMCEvCSJuAhtwO5CQpJdsskuG7f9H9mZgiBdKKQluywiErSESGlxVQjUXusjdHxMxGfOmTrDlC666IHv3jvn3u+7Z845lxkOh+R/jMMhEokQlmWJyWQiDMPwgOfg9gGE0TkZ8B0u+wpo9Pt9MhgMSCqV+i1gsKc2u31tLhhcm5ufl7wejxedtFKh2cvLXPbi4rwhy+fgKvwRgUZ2eTxvtg8ODn1er89hsZDP19dkamaGTIqiX1hf9z+bnl6IHx8LZUqTmgiLA4Rlt/J8eHt//9Dpcvns4+Oq4lUup6ujD/d24AKIMowcXQD+6aUUDK7yDofPMjZGWIZRSe12WxdAH+7Z4MziysoqcnSBXq/nnwoEJFzX7+7ITbWqolAo6GsE7mHyApIkIUfPAXw4BYfjoXbbpNutzo1GQ1+r54BcvL0leBY5RgEWyzgwkF+FwyQUCpHdzU3C87wKm81GZpeWyMLyssoxCshNWS5bBOGxdls8kSA7W1vkXTyuR4AtJ3c6RKnXy8jRc9Dtdm8+ZTJ5DhoJw0QTXC6VjLMGSCB5ANXIptN55BirkP+QTKY7zSbtjwQ0EaNhAtl2m75PJNLI0QVg49fPUunsbTR6Itdq1MSyf/U8+hRZptGjoxNK6Rly0M/gY2KwxtB5Vqt1VhTFyO7e3uLrjY0Xj0RxAjuiRGnt4+npl1gslikWi6lWq3WlKApRuSMBTOYEwM1xnNNsNj+BhyUaHxOE/AP++9soeRVAFbg9TQBjtozA/eMF9wEtgALcwb0AAwCoRifZl32HrAAAAABJRU5ErkJggg=="></img>';
 $icon_options_help ='<img id="opt_help" title="Help" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKkSURBVDjLpZPdT5JhGMb9W+BPaK3matVqndXWOOigA6fmJ9DUcrUMlrN0mNMsKTUznQpq6pyKAm8CIogmypcg8GIiX8rHRHjhVbPt6o01nMvZWge/k3vP9duuZ/edAyDnf/hjoCMP2Vr3gUDj3CdV6zT1xZ6iFDaKnLEkBFOmPfaZArWT5sw60iFP+BAbOzTcQSqDZzsNRyCNkcVoaGghzDlVQKylOHJrMrUZ2Yf52y6kc36IxpyoH1lHF7EBgyMKV4jCJ5U/1UVscU4IZOYEa3I1HtwI01hwxlDLhDoJD/wxGr5YGmOLAdRIrVCuhmD3JdA6SQabx12srGB0KSpc86ew4olDOGjH4x4z0gdHDD9+c4TaQQtq+k2Yt0egXYugTmoVZgV9cyHSxXTtJjZR3WNCVfcK/NE0ppYDUNu2QTMCtS0IbrsOrVMOWL27eNJtJLOCDoWXdgeTEEosqPxoBK/TwDzWY9rowy51gJ1dGr2zLpS2aVH5QQ+Hbw88sZ7OClrGXbQrkMTTAQu4HXqUv9eh7J0OSfo7tiIU+GItilpUuM/AF2tg98eR36Q+FryQ2kjbVhximQu8dgPKxPMoeTuH4tfqDIWvCBQ2KlDQKEe9dBlGTwR36+THFZg+QoUxAL0jgsoOQzYYS+wjskcjTzSToVAkA7Hqg4Spc6tm4vgT+eIFVvmb+eCSMwLlih/cNg0KmpRoGzdl+BXOb5jAsMYNjSWAm9VjwesPR1knFilPNMu510CkdPZtqK1BvJQsoaRZjqLGaTzv1UNp9EJl9uNqxefU5QdDnFNX+Y5Qxrn9bDLUR6zjqzsMizeWYdG5gy6ZDbk8aehiuYRz5jHdeDTKvlY1IrhSMUxe4g9SuVwpdaFsgDxf2i84V9zH/us1/is/AdevBaK9Tb3EAAAAAElFTkSuQmCC"></img>';
-$icon_options_restore ='<img id="opt_restore" title="Restore removed results" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAAQAAAAEABcxq3DAAAB3klEQVQ4y43TW2jOARjH8c//ff/vu7PDnFaL0ORwMaaEC+VwocjKheRCKMWFO7kh5cIdblzSRHFhk7IkF7JpYdQ0coitaBNj1vRu3s3ew9/Na200+dVTT8/z9O3pOQQmqhlxs+QsFXgEdvinYqALTYiZa8A5P+xx3H8p5h0eImmxPhd9t09WkZf/C2hEhVofXTGgHsQtcNtygVKX0Tg1IHDdFr3OSlmlBOWYJqfcVyXeSOgQeCLvuVG95vipA0d+Ay65761N4qhAWcHKJ/hFMgJ9sjpl3MFds32QJu6gF6gxYjEIUSIvKSuUE5MXCTFd3lJZ22Rsl5ZT7GXcLn0WaRVZIG2ZvMA8LWY7Kuma0E2BeyKv5GSNqjKsyqiN+BbaiRY9ah1S7ItPDsvqsVmzp1iLbrShVin2G3TGkDKhraGgMM52A1Y6pthnSTMRiESgplDTKq3IYyPSUkpVioJJO3mNSELaDCP6JbGukGvDTDN0Oq/bXgkZK5wMJwFWgAz6x2PDuAAWaXfae7vFjal21XwNkzuYqAgPUKbYR/U+O2HQMhWeqtZgiRtShv8GtI97CayRckC/OhnPVLploYeafHcKcaYGRFZjgzFd6FSnz5C86j9PeWpAiBwi66f+hV+BC5dVOBoL5wAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxMS0wMy0zMFQyMzowNToxNC0wNzowMFR7eiwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTEtMDMtMzBUMjM6MDU6MTQtMDc6MDAlJsKQAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg=="></img>';
+$icon_options_restore ='<img id="opt_restore" title="View removed results" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACnUlEQVQ4jYWSS2xMYRiGn/+f/58zZ2Zo9aJSt1ONS6RYuKaJiGBBwkikEaVsxFaIREIQwYaFxMKGhcQtNqUVC3GJIEgQqTsZnLauVdNRptPpnHN+C5lJlcS7/d7nzZvv+wT/0NoWt9o3LAZqAR9IhgRXTyecrqFeMQQc6RsOAY2AGuIdAE4owfZTCSf9V0BjizslMFwBxvyr1SAlpWDJmYTjFgPWtbqlXsAjwPkPXNBzLcXskyvG9ykAL2DXYHhapcXCsXFqSjQGeJMe4Fp7hhepXKHyVC8wW4H9oqm1PZIPzBdgeFQJNs4oY2aVzfPufq53ZLCVYH3dCJSAux+znHjaQ843AJ9jWo6WXmDmAMNLLcmu+pHMrLJ5lcpx4PITWg7vZKDtCloKhBDUj46yY14lMS0BRmW9oE4acKyQYNvsSqrjGoBb7zN8vXqS7Ns2bl5q5n7bM9q6sgA4JWG2zipHCQgM4yQQ+IEh4wXFDZWGQ1TEbQA6OzvYc/wcL1MDxbmbytCZ7sUYgxKQ9AwcftDNllkVTCmzWOLE6Vm9iWZPggxRvaiRBWOjANx418O+2x1EwmHSfX1JseFiu8r55hNQERKQmBBh+aRyPvzwuNH5EykEC8fFqIoqjj38wKln3cSsMLbW7qi4rhEAay64uw3s/X3SAC/3nWW1I6iriBMYeNz1k/Ovv/E9D1GtsbUmotXm8w0TjygAJcXBfGBWAdOVlGCVcOTRZ3L5PFpKwiGFpVQRtsP6Xkyro8VPBFjb4o7xDZeBqYUmbuobnh9gKYWtivADS6mlZ1c63QCyEHA64bzXUswFDgK9SkpqysoZZkWwlSaiVTqi1R5bqfkF+I8Gg9XU2h71AlNvYILn+/T2Z5PxsL7T3DC5f6j3F/Zl9lJ4oplxAAAAAElFTkSuQmCC"></img>';
+$icon_options_save ='<img id="opt_save" title="Save settings..." style="margin:-2px 2px -2px 2px; src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU9JREFUeNpi9K3Y28fAwJACxAwWWqIsDESAE9de/4Ey57D8+/svRclAjRfEq4qSI0Y/Q96yR2D63oVbKUz//v5lIBeA9LL8/fOX4c+ff3DBu69/Mtx59ROrBhUxdgZlUXa4epBelj9//jD8RjIApACE8QGYepBelr+//zD8+v2XJBfA1IP0svxBM4AYF8DUg/Qy/fkFNODXXzDefek9wYADqYGpB+kFuuA3w89fkGiduO0RGBMLQHrBXvj5i7yo/AMOA6gXYKA7SopBWZwNq4a7L38xxGWtYBC3sYMY8AtbIAI1O2XuArP3TXdDMQBmMHIgYkQjOHr+/SMqFv6CY+HPnznvTp/4DEocsAQC0o/PDJhaUEJiun+4uAiYJOd8OH38MyyJHp7tAcY4Aw+s+R8kKUMzRRGI/nTmWMqs5T/xpqIv3379ZDhzDMadAxBgALae7bsNa2kaAAAAAElFTkSuQmCC"></img>';
 $(".thin").after('<div style="width:60px; position:absolute; left:'+$hor_htr+'; top:'+$ver_htr+';">'+ $icon_options_help + $icon_options_restore + $icon_options_settimer +'</div>');	// Help, Restore and Timer ICONS in header
 $("tr").children(":first-child").css({'font-variant':'small-caps'});																// Make the forum links small-caps.
 $("tr").children(":first-child").next().children(":first-child").children(":first-child").each(function(){							// Find first thread link in second column of the table
@@ -403,7 +415,8 @@ $(".tr_options").css({ 'width':'18px', 'height' : '18px', 'background-color' : '
 
 $("#opt_toggle").click(function(){$(".tr_options").toggle();$("#opt_help").toggle();$("#opt_restore").toggle();$("#opt_settimer").toggle();});					// Show / Hide drop-down menus
 $("#opt_help").click(function(){$("#help").toggle();});
-$("#opt_restore").click(function(){$("#results").toggle();});
+//$("#opt_restore").click(function(){$("#results").toggle();});							// #results are still intact... maybe I'll use it for something
+$("#opt_restore").click(function(){$("tr").not(".colhead").toggle("hidden show");});
 $("#opt_settimer").click(function(){$("#frequency").toggle();});
 
 console.log("IDs & Options [WORKS]");
@@ -515,6 +528,9 @@ $icon_tutorial ='<img style="margin:5px 5px -3px 0px" src="data:image/png;base64
 // ICON - Solved - checkmark icon
 $icon_solved ='<img style="margin:5px 5px -3px 0px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QIECjYBF+KChQAAAWhJREFUOMuVk71LXFEQxX/zXJSIlYqIRFGyKyw2IoiypFAIBARL/wI7JWBjoY26sRKsBP8AsbHRRiys3CJuYcQUSaGWKgqbzbofivtc70nlB+LHewO3mXPn3HPmziCJsCf6nfHoLCuSiBAyYnO27G5IlA7ZBjBJoYorBT4XfrKXTWk0FEHnnC3I8eXfDn42pf77fCALsXkbB3pzaRqzKbU9xbwgBHbHQPEPrZUik8+xSBDffoZ4+ZTNy7TWnuPeu9KN7tJvznK7mnjpTiSWtBETvYK64xmNPRQn7auJgfwBH7I7Srz2iIcYFjQD8c6kPXoUIzdndPkZVt9S6RlcYEQxaiSGAGKzNo2j5+qIk9wPLb7ZYEl8mrJfXjXOqijJca07mvL71Ge21P5ekz0Ad8u68/HcLXX+Xz7m96mv5FkK9MX3k9jxzTb8AvHyObWVIueXafWFIgBoGLRTV8bL7aol6H6EWqaX4j/+rL7uLygdawAAAABJRU5ErkJggg=="></img>';
 
+// ICON - Creative Workshop - JPG icon
+$icon_creawork ='<img style="margin:5px 5px -3px 0px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4YSRudE8o9VGjUYPjGnGXOMk423GbcajJgYmISZLTepN7ppSTbmmKaY7TDtMx83MzaLN1pk1mz0x1zLnm+eb15vft2BaeFostqi2uGVJsuRaplnutrxuhVo5WaVYVVpds0atna0l1rutu6cRp7lOk06rntZnw7Dxtsm2qbcZsOXYBtuutm22fWFnYhdnt8Wuw+6TvZN9un2N/T0HDYfZDqsdWh1+c7RyFDpWOt6azpzuP33F9JbpL2dYzxDP2DPjthPLKcRpnVOb00dnF2e5c4PziIuJS4LLLpc+Lpsbxt3IveRKdPVxXeF60vWdm7Obwu2o26/uNu5p7ofcn8w0nymeWTNz0MPIQ+BR5dE/C5+VMGvfrH5PQ0+BZ7XnIy9jL5FXrdewt6V3qvdh7xc+9j5yn+M+4zw33jLeWV/MN8C3yLfLT8Nvnl+F30N/I/9k/3r/0QCngCUBZwOJgUGBWwL7+Hp8Ib+OPzrbZfay2e1BjKC5QRVBj4KtguXBrSFoyOyQrSH355jOkc5pDoVQfujW0Adh5mGLw34MJ4WHhVeGP45wiFga0TGXNXfR3ENz30T6RJZE3ptnMU85ry1KNSo+qi5qPNo3ujS6P8YuZlnM1VidWElsSxw5LiquNm5svt/87fOH4p3iC+N7F5gvyF1weaHOwvSFpxapLhIsOpZATIhOOJTwQRAqqBaMJfITdyWOCnnCHcJnIi/RNtGI2ENcKh5O8kgqTXqS7JG8NXkkxTOlLOW5hCepkLxMDUzdmzqeFpp2IG0yPTq9MYOSkZBxQqohTZO2Z+pn5mZ2y6xlhbL+xW6Lty8elQfJa7OQrAVZLQq2QqboVFoo1yoHsmdlV2a/zYnKOZarnivN7cyzytuQN5zvn//tEsIS4ZK2pYZLVy0dWOa9rGo5sjxxedsK4xUFK4ZWBqw8uIq2Km3VT6vtV5eufr0mek1rgV7ByoLBtQFr6wtVCuWFfevc1+1dT1gvWd+1YfqGnRs+FYmKrhTbF5cVf9go3HjlG4dvyr+Z3JS0qavEuWTPZtJm6ebeLZ5bDpaql+aXDm4N2dq0Dd9WtO319kXbL5fNKNu7g7ZDuaO/PLi8ZafJzs07P1SkVPRU+lQ27tLdtWHX+G7R7ht7vPY07NXbW7z3/T7JvttVAVVN1WbVZftJ+7P3P66Jqun4lvttXa1ObXHtxwPSA/0HIw6217nU1R3SPVRSj9Yr60cOxx++/p3vdy0NNg1VjZzG4iNwRHnk6fcJ3/ceDTradox7rOEH0x92HWcdL2pCmvKaRptTmvtbYlu6T8w+0dbq3nr8R9sfD5w0PFl5SvNUyWna6YLTk2fyz4ydlZ19fi753GDborZ752PO32oPb++6EHTh0kX/i+c7vDvOXPK4dPKy2+UTV7hXmq86X23qdOo8/pPTT8e7nLuarrlca7nuer21e2b36RueN87d9L158Rb/1tWeOT3dvfN6b/fF9/XfFt1+cif9zsu72Xcn7q28T7xf9EDtQdlD3YfVP1v+3Njv3H9qwHeg89HcR/cGhYPP/pH1jw9DBY+Zj8uGDYbrnjg+OTniP3L96fynQ89kzyaeF/6i/suuFxYvfvjV69fO0ZjRoZfyl5O/bXyl/erA6xmv28bCxh6+yXgzMV70VvvtwXfcdx3vo98PT+R8IH8o/2j5sfVT0Kf7kxmTk/8EA5jz/GMzLdsAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAAtNJREFUeNpsk99rU2ccxj/nJCQxJ+1M2rSNWWm6tlhRi4haZwcq0ulGwQniDxS99ULwH3BTEcG7gaBV14l4N+vmUBhssrGwKWUFR1EMuCn2p8TUmObnyTk579eLmNiyfeHluXqe5/s+7/NqIkJtfhp7JoVCmaJpAVAsQsHMAVC2bCzbAeDMsUGtThKR+vkhnpC8qSRvKsmVlGRLjmSKSjJFJem8I18N/yIiUkNEBJ3/GSWCI6BEQylBKWHRopw5Nsipy/cEwL2YWLEVTinLzNivlJLTaEYjvt4NtMVWo3RtiUlNRFucwa3haxJJ/0UyEAU7ydDmdlKzaZ5kw/TuPc7Id3/8Z1tNRMhmFnwPvzn/uK/Z7koUhfisYrU+x/oPm2CuRMptM9O5jciW/URDBs4705Gbv1UzGLtw+sdEeEfXxWddNFdyfN6a5eO17eTzZRL/zPDi1QJN2QQVK4Oqh19F9/jojT1iFXfGpzwMWJM0BP00Nxroy/xEWlbQuqkPj8+PWTS58yBO9IuDdQFH6bjTE/fPhj0FTnq/JRQL4m00sFw+/IEg4jf4szCF9iZHf0OU+dRLBECqL1V2dNxO/rXhiRg8nU5TegOxFRa//2uzqrtCeHOYq5Nj9JdjuDILhLp3opRUBd5dxe0KNM2DGfv5pSwM7Bj4wB9K8kl3L50tLgJtQc75ozTmyly6Hmff7n6U1DaAckVH1zt6Rv9+nqRr49bPGnw6PR+1sanHS2t7C8vDEYKmcGXkLlsOnSDUsKxOBrCVhr5u95GvM72DkaGhXY9KFZepeXxoHi8AE7dHuTT8Pf1Hv6RvZXedLAJKge3oLCnSqcv3nn9q3e70GF4ePJphPrSB7XuO0tHSXHeVmgDCuWvjS6vc1hTunA8eZnouRc+BNWzv6MDQ37sC9RLVZolAOptmNiVAgMnxKRifolzRsZWG7VT/nWlV0XJcgIu3AwC9pm+xmyP3lwAAAABJRU5ErkJggg=="></img>';
+
       /*--------------------------------------------------------------------------------------+
       ||||||||||||||||||||||||||||||||| ICONS & PRESET BACKGROUNDS ||||||||||||||||||||||||||||
       +---------------------------------------------------------------------------------------+
@@ -601,3 +617,6 @@ $("td:parent:first-child:contains('Tutorials')").children(':first-child').prepen
 
 // ICON - Solved
 $("td:parent:first-child:contains('Solved')").children(':first-child').prepend($icon_solved);
+
+// ICON - Creative Workshop
+$("td:parent:first-child:contains('Creative Workshop')").children(':first-child').prepend($icon_creawork);
