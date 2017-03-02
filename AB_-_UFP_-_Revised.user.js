@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.2.2
+// @version 		1.3
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -35,7 +35,7 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$versionnumber = (' V1.2.2')
+$versionnumber = (' V1.3')
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
 $(".thin").after(' \
@@ -172,14 +172,23 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 		} else if  ($whattodo == "DEL") {
 			if ($withthis == "for"){
 				$realid = "forumid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().parent().remove();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewforum&'+$realid+'">'+$realid+'</href></li>');
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
-				$('a[href$="' + $realid + '"]').parent().parent().parent().remove();
+				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewthread&'+$realid+'">'+$realid+'</href></li>');
 			};
 		};
+	};
+};
+
+for ( var i = 0, len = localStorage.length; i < len; ++i ) {
+$storedvalue = localStorage.getItem( localStorage.key( i ) );
+	if( $storedvalue.substring(0, 3) == "WHT") {
+		$thread = $storedvalue.substring(3);
+		$('a[href$="' + $thread + '"]').parent().parent().parent().show();
+		$('a[href$="' + $thread + '"]').before('&#x2714;');
 	};
 };
 
@@ -224,29 +233,43 @@ $("tr").children(":first-child").next().children(":first-child").children(":firs
       +---------------------------------------------------------------------------------------+
       |       Create drop-down menu in the last cell with higlight and remove options.        |
       +--------------------------------------------------------------------------------------*/	
-	  
+
 $lastcell.html('<select class="tr_options" id="'+$thr_id+'"> \
 					<option disabled selected></option> \
 					<option disabled style="font-weight:bold;text-decoration:underline;font-size:12px;">[ Forum : '+$for_id+' ] </option> \
 					<option id="FBGR'+$thr_id+'" title="Red background\nfor forum title." value="BGR'+$for_local+'">Red BG</option> \
 					<option id="FBGG'+$thr_id+'" title="Green background\nfor forum title." value="BGG'+$for_local+'">Green BG</option> \
 					<option id="FBGB'+$thr_id+'" title="Blue background\nfor forum title." value="BGB'+$for_local+'">Blue BG</option> \
-					<option id="FBGB'+$thr_id+'" title="Yellow background\nfor forum title." value="BGY'+$for_local+'">Yellow BG</option> \
+					<option id="FBGY'+$thr_id+'" title="Yellow background\nfor forum title." value="BGY'+$for_local+'">Yellow BG</option> \
 					<option id="FBGS'+$thr_id+'" title="Striped background\nfor forum title." value="BGS'+$for_local+'">Striped BG</option> \
-					<option id="RESF'+$thr_id+'" title="Disables background\nfor forum title." value="RES'+$for_local+'" style="font-size:12px;">&#9888; Reset</option> \
+					<option id="RESF'+$thr_id+'" title="Disables all settings\nfor forum title." value="RES'+$for_local+'" style="font-size:12px;">&#9888; Reset</option> \
 					<option id="DELF'+$thr_id+'" title="Removes forum\nfrom the results." value="DEL'+$for_local+'" style="color:red;font-size:12px;">&#9888; Remove Forum</option> \
 					<option disabled></option> \
 					<option disabled style="font-weight:bold;text-decoration:underline;font-size:12px;">[ Thread : '+$thr_id+' ] </option> \
 					<option id="TBGR'+$thr_id+'" title="Red background\nfor thread title." value="BGR'+$thr_local+'">Red BG</option> \
 					<option id="TBGG'+$thr_id+'" title="Green background\nfor thread title." value="BGG'+$thr_local+'">Green BG</option> \
 					<option id="TBGB'+$thr_id+'" title="Blue background\nfor thread title." value="BGB'+$thr_local+'">Blue BG</option> \
-					<option id="TBGB'+$thr_id+'" title="Yellow background\nfor thread title." value="BGY'+$thr_local+'">Yellow BG</option> \
+					<option id="TBGY'+$thr_id+'" title="Yellow background\nfor thread title." value="BGY'+$thr_local+'">Yellow BG</option> \
 					<option id="TBGS'+$thr_id+'" title="Striped background\nfor thread title." value="BGS'+$thr_local+'">Striped BG</option> \
-					<option id="REST'+$thr_id+'" title="Disables background\nfor thread title." value="RES'+$thr_local+'" style="font-size:12px;">&#9888; Reset</option> \
+					<option id="REST'+$thr_id+'" title="Disables all settings\nfor thread title." value="RES'+$thr_local+'" style="font-size:12px;">&#9888; Reset</option> \
+					<option id="WHTT'+$thr_id+'" title="Adds thread to\nthe whitelist." value="WHT'+$thr_id+'" style="font-size:12px;">&#x2714; Whitelist</option> \
+					<option id="RWHT'+$thr_id+'" title="Removes thread \nfrom whitelist." value="RWH'+$thr_id+'" style="font-size:12px;">&#x2716; Whitelist</option> \
 					<option id="DELT'+$thr_id+'" title="Removes thread\nfrom the results." value="DEL'+$thr_local+'" style="color:red;font-size:12px;">&#9888; Remove Thread</option> \
 					<option disabled></option> \
 				</select>');
 
+if ( $(".tr_options[id='" + $thr_id + "']").parent().prev().prev(":contains('\u2714')").length > 0 ) {
+ 	$("option[id='FBGR"+$thr_id+"']").hide();
+	$("option[id='FBGG"+$thr_id+"']").hide();
+	$("option[id='FBGB"+$thr_id+"']").hide();
+	$("option[id='FBGY"+$thr_id+"']").hide();
+	$("option[id='FBGS"+$thr_id+"']").hide();
+	$("option[id='DELF"+$thr_id+"']").hide();
+	$("option[id='WHTT"+$thr_id+"']").hide();
+} else {
+	$("option[id='RWHT"+$thr_id+"']").hide();
+};
+				
 $(".tr_options[id=" + $thr_id + "]").change(function(){
 	if ( this.value.substring(0, 3) == "BGR" ){
 		if ( this.value.substring(3, 6) == "for" ) {			// Red BG for all threads in selected forum
@@ -330,17 +353,31 @@ $(".tr_options[id=" + $thr_id + "]").change(function(){
 		};
 	} else if ( this.value.substring(0, 3) == "RES" ){
 		if ( this.value.substring(3, 6) == "for" ) {			// Reset background settings for selected forum
-			if (confirm("Do you really want to\nReset background settings\nfor this forum?\n\nID=" +this.value.substring(6) )){
+			if (confirm("Do you really want to\nRESET ALL SETTINGS\nfor this forum?\n\nID=" +this.value.substring(6) )){
 				$local_id = this.value.substring(3);
 				localStorage.removeItem($local_id);
 				console.log("localStorage LOG : " + $local_id + " is removed! ");
 			};
 		} else if ( this.value.substring(3, 6) == "thr" ) {		// Reset background settings for selected thread
-			if (confirm("Do you really want to\nReset background settings\nfor this thread?\n\nID=" +this.value.substring(6) )){
+			if (confirm("Do you really want to\nRESET ALL SETTINGS\nfor this thread?\n\nID=" +this.value.substring(6) )){
 				$local_id = this.value.substring(3);
 				localStorage.removeItem($local_id);
 				console.log("localStorage LOG : " + $local_id + " is removed! ");
 			};
+		};
+	} else if ( this.value.substring(0, 3) == "WHT" ){			// Whitelist this thread
+		if (confirm("Do you really want to\nADD this thread\nto the whitelist?\n\nID=" +this.value.substring(3) )){
+			$local_id = this.value.substring(3);
+			$local_value = this.value;
+			localStorage.setItem($local_id,$local_value);
+			console.log("localStorage LOG : " + $local_id + " is saved with this value " + $local_value);
+		};
+	} else if ( this.value.substring(0, 3) == "RWH" ){			// Remove thread from whitelist
+		if (confirm("Do you really want to\nREMOVE this thread\nfrom the whitelist?\n\nID=" +this.value.substring(3) )){
+			$local_id = this.value.substring(3);
+			$local_value = this.value;
+			localStorage.removeItem($local_id);
+			console.log("localStorage LOG : " + $local_id + " is removed! ");
 		};
 	} else if ( this.value.substring(0, 3) == "DEL" ){
 		if ( this.value.substring(3, 6) == "for" ) {			// REMOVE selected forum
