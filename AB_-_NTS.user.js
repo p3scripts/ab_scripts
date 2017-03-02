@@ -3,6 +3,7 @@
 // @author 		psyntax3rr0r
 // @description Not Tiny Searchbox
 // @include     https://animebytes.tv/torrents.php*
+// @include		https://animebytes.tv/torrents2.php*
 // @version     1
 // @grant       none
 // ==/UserScript==
