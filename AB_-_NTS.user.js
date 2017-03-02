@@ -8,5 +8,7 @@
 // @grant       none
 // ==/UserScript==
 
+$("#artist_music").removeClass("artist_name standard_fields");
+$("#artist_music").outerWidth('300');
 $("#series_name_anime").removeClass("series_name standard_fields");
 $("#series_name_anime").outerWidth('300');
