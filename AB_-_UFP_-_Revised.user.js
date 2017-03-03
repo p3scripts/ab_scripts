@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.3.2
+// @version 		1.3.3
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -10,23 +10,13 @@
 // @icon 			http://animebytes.tv/favicon.ico
 // ==/UserScript==
 
-
-
       /*--------------------------------------------------------------------------------------+
-      ||||||||||||||||||||||||||||||||||||||| CONTENTS ||||||||||||||||||||||||||||||||||||||||
+      |||||||||||||||||||||||||||||||||||||||| NOTES ||||||||||||||||||||||||||||||||||||||||||
       +---------------------------------------------------------------------------------------+
       |                                                                                       |
-      |		   1. Automatic page reload timer & Logo_______________________Line   35 -  68    |
-      |		   2. Filter___________________________________________________Line   77 - 145    |
-      |		   3. Thread & Forum IDs_______________________________________Line  153 - 165    |
-      |		   4. Thread & Forum Options___________________________________Line  153 - 165    |
-      |		   5. Thread & Last read post links____________________________Line  174 - 306    |
-      |		   6. Icons____________________________________________________Line  335 -        |
-      |		   7. Icons & Preset backgrounds  _____________________________Line  421 -        |
-      |                                                                                       |
-      |                                                                                       |
-      |                   NOTE : YOU HAVE TO ENABLE COOKIES IN YOUR BROWSER                   |
+      |                      YOU HAVE TO ENABLE COOKIES IN YOUR BROWSER                       |
       |                   TURN OFF WRAP FOR EASIER NAVIGATION IN THE SCRIPT                   |
+      |                                                                                       |
       +---------------------------------------------------------------------------------------+
 
       +---------------------------------------------------------------------------------------+
@@ -35,11 +25,23 @@
       |             You can modify the refresh rate below the timer on the page.              |
       +--------------------------------------------------------------------------------------*/
 
-$versionnumber = (' V1.3.2')
+$versionnumber = (' V1.3.3')
+$("h2").html('UFP - Revised '+$versionnumber+'')
+if ($("link[href*='coalbytes']").length > 0){$curr_css = 'coalbytes';}
+else if ($("link[href*='tentacletastic']").length > 0){$curr_css = 'tentacletastic';}
+else if ($("link[href*='gorgeous']").length > 0){$curr_css = 'gorgeous';}
+else if ($("link[href*='milkyway']").length > 0){$curr_css = 'milkyway';}
+else if ($("link[href*='toblerone']").length > 0){$curr_css = 'toblerone';}
+else if ($("link[href*='dream']").length > 0){$curr_css = 'dream';}
+else if ($("link[href*='white']").length > 0){$curr_css = 'white';}
+else if ($("link[href*='black']").length > 0){$curr_css = 'black';};
+console.log("You are using " + $curr_css + " stylesheet.");
+
 if(!localStorage.getItem('timer')) { 								// Does timer exists in localSorage?
 	localStorage.setItem('timer','2');};							// If not, set the timer value to 2 minutes (default).
 if(!localStorage.getItem('opacity')) { 								// Does opacity exists in localSorage?
 	localStorage.setItem('opacity','0.45');};						// If not, set the opacity value to 0.45 (default).
+
 $(".thin").after(' \
 <center> \
 	<div> \
@@ -49,7 +51,8 @@ $(".thin").after(' \
 		<div id="frequency">Set reload frequency to <input id="timerinput" style="width:35px; height:16px; font-size:12px; font-weight:bold;" type="number" value="'+localStorage.getItem('timer')+'" min="1" max="30"> minute(s). \
 		<div style="margin:5px;">Opacity <input id="timeropacity" type="range" id="myRange" step="0.01" value="'+localStorage.getItem('opacity')+'" min="0" max="1" style="width:200px; position:relative; top:4px;"></div></div> \
 	</h4> \
-</center>');														// New DIV where the timer goes, and <h3> where you can set the time.
+</center>');
+														// New DIV where the timer goes, and <h3> where you can set the time.
 $("#timerinput").change(function(){									// On input change...
 	localStorage.setItem('timer',this.value);						// Set timer in localSorage to the value of the input field.
 	console.log("Countdown set to "+this.value+" minute(s)");});	// Console log on timer settings.
@@ -58,6 +61,7 @@ $("#timeropacity").change(function(){								// On input change...
 	console.log("Opacity of the timer is set to "+this.value);});	// Console log on timer opacity settings.
 $cd_opacity = localStorage.getItem('opacity');
 console.log("Setting the timer & timer opacity [WORKS]");
+
 var countdown = localStorage.getItem('timer') * 60 * 1000;			// Reload page every 2 minutes (default), countdown timer included.
 var timerId = setInterval(function(){
 	countdown -= 1000;
@@ -185,13 +189,13 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 				$realid = "forumid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide()
 				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
-				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75'});
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75','color':'rgba(255, 0, 0, 0.7)'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewforum&'+$realid+'">'+$realid+'</href></li>');
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
-				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
-				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75'});
+				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").next().children(":first-child").append('&#x2718;');
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75','color':'rgba(255, 0, 0, 0.7)'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewthread&'+$realid+'">'+$realid+'</href></li>');
 			};
 		};
@@ -207,6 +211,12 @@ $storedvalue = localStorage.getItem( localStorage.key( i ) );
 		$('a[href$="' + $thread + '"]').parent().parent().parent().show();
 		$('a[href$="' + $thread + '"]').after('&#x2714;');
 	};
+};
+
+if ($curr_css == "milkyway" || $curr_css == "dream" || $curr_css == "toblerone" || $curr_css == "white" || $curr_css == "black" ){
+	$("tr").css({'background':'none'});																	// Removing the f#%cked up background completely
+	$bg_rgba = $bg.replace(')', ', 0.5)').replace('rgb', 'rgba');										// Create RGBA value from RGB
+	$("tbody").children().not(":hidden,.colhead").not(":even").css({'background':''+$bg_rgba+''});		// Fixing the f#%cked up nth-child(2n) td background coloring if the stylesheet is delicious
 };
 
 $("[id*='_whichwasremoved']").click(function(){
@@ -226,11 +236,12 @@ $("tr").append('<td width="18px" style="padding:3px; border-left-width:0px" id="
 $icon_options_header ='<img id="opt_toggle" title="Show / Hide options" style="position:relative; top:3px; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAABuwAAAbsBOuzj4gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAALnSURBVHjajZNrSJNhFMfPu5nMvA2XjumWOkdeklBXipKBkReSJCRiH0qitIsi6URUAvFLDhSclqK4adGXgYXOOa+v67Y52Zb7kKi55ja6fDDdRdtsbXNvr8ZgiFg/eG7nPOf/nMPzPIBhGDxubY3aG//VRCLRtcnJyVGVWlXoswGKot1WqxUblUiERwV3dXWOrOpWseXlZe/ExPhWXV0dbV+gsbHxEjor86g1mt3BZ89zDwuuqak5hqIzns3NDWx4eFgLAEE+H7LXZWdnn4mNZY63tfEoGxsbuWw2ewH8qK6uruBwOP1JyUmg1+ststdoHIPOyFcolJoAwJmfn/+IIAjLYjPP9/f1KfF1ES76xidAi6ZVGkxG+KT7DFnn2BFxJ+PNFosFUcgVdIJvE57Jb3R6OrO2lquKjIqanpubKwGcnp6eE1mZmaeVSiXYt21gtVnhp91OfC+XzywtLa3vl+APngnh9p1yKZfLzTcZDfVOp7N1zbAW5HF7dm02245jx/FDp9OJZtHZZgwnAA6A27y4SDEzPk56ubiYPyaRAIlE8ojFYo5GoxHj/l3wgwCHwOPxMhISmIUDQgHkFxRCUYbZ3JCzeNYXfKRAe3t7Xgw9Rj0wKCSGhYVjxreVX1PpT6gX8lwNYzVIxpECfD7/Snh4mEwoEBASTyWD0WjsUSu0Q6qpXQ85zYtcvEteGOEGiMAPv5fWdaOD3+HNzsnC8DvHKioqXvl80REQL+8MdLq+sLBtLQsbeQiL3yRAwH1/M+jt7a2iUqkvXg4NIcHHQ4HBYCgEAsF13yHfzZhRNON6pFMYvM6tLci/RUvVvgP9ugwJRFAUJZtMJrlarVaQyeT7oaGhK83NzWm4ugsOUF6APODeIzyNCCYRQyIRWJlySIkhISH09PT0OiaTaXe73aSmpqa94F9wCCU3Wz7UVrXoUuLcVzGHxyvVQv1+jaWlpd1lZWWzFAqF+j/fmkWDpPOJkLI3/wPPj9GwXXoALAAAAABJRU5ErkJggg=="></img>';
 $(".colhead").children(":last-child").html($icon_options_header);																	// Options ICON in header.
 $hor_htr = $(".colhead").children(":nth-child(4)").position().left - 65 + 'px';														// Help, Restore and Timer ICON Hpos
-$ver_htr = $("#opt_toggle").position().top + 'px';																					// Help, Restore and Timer ICON Vpos
-$icon_options_settimer ='<img id="opt_settimer" title="Set reload frequency" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmRJREFUeNqkU0trGlEUvjOOKVHHUaO0DpZIV32FxMCEvCSJuAhtwO5CQpJdsskuG7f9H9mZgiBdKKQluywiErSESGlxVQjUXusjdHxMxGfOmTrDlC666IHv3jvn3u+7Z845lxkOh+R/jMMhEokQlmWJyWQiDMPwgOfg9gGE0TkZ8B0u+wpo9Pt9MhgMSCqV+i1gsKc2u31tLhhcm5ufl7wejxedtFKh2cvLXPbi4rwhy+fgKvwRgUZ2eTxvtg8ODn1er89hsZDP19dkamaGTIqiX1hf9z+bnl6IHx8LZUqTmgiLA4Rlt/J8eHt//9Dpcvns4+Oq4lUup6ujD/d24AKIMowcXQD+6aUUDK7yDofPMjZGWIZRSe12WxdAH+7Z4MziysoqcnSBXq/nnwoEJFzX7+7ITbWqolAo6GsE7mHyApIkIUfPAXw4BYfjoXbbpNutzo1GQ1+r54BcvL0leBY5RgEWyzgwkF+FwyQUCpHdzU3C87wKm81GZpeWyMLyssoxCshNWS5bBOGxdls8kSA7W1vkXTyuR4AtJ3c6RKnXy8jRc9Dtdm8+ZTJ5DhoJw0QTXC6VjLMGSCB5ANXIptN55BirkP+QTKY7zSbtjwQ0EaNhAtl2m75PJNLI0QVg49fPUunsbTR6Itdq1MSyf/U8+hRZptGjoxNK6Rly0M/gY2KwxtB5Vqt1VhTFyO7e3uLrjY0Xj0RxAjuiRGnt4+npl1gslikWi6lWq3WlKApRuSMBTOYEwM1xnNNsNj+BhyUaHxOE/AP++9soeRVAFbg9TQBjtozA/eMF9wEtgALcwb0AAwCoRifZl32HrAAAAABJRU5ErkJggg=="></img>';
-$icon_options_help ='<img id="opt_help" title="Help" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKkSURBVDjLpZPdT5JhGMb9W+BPaK3matVqndXWOOigA6fmJ9DUcrUMlrN0mNMsKTUznQpq6pyKAm8CIogmypcg8GIiX8rHRHjhVbPt6o01nMvZWge/k3vP9duuZ/edAyDnf/hjoCMP2Vr3gUDj3CdV6zT1xZ6iFDaKnLEkBFOmPfaZArWT5sw60iFP+BAbOzTcQSqDZzsNRyCNkcVoaGghzDlVQKylOHJrMrUZ2Yf52y6kc36IxpyoH1lHF7EBgyMKV4jCJ5U/1UVscU4IZOYEa3I1HtwI01hwxlDLhDoJD/wxGr5YGmOLAdRIrVCuhmD3JdA6SQabx12srGB0KSpc86ew4olDOGjH4x4z0gdHDD9+c4TaQQtq+k2Yt0egXYugTmoVZgV9cyHSxXTtJjZR3WNCVfcK/NE0ppYDUNu2QTMCtS0IbrsOrVMOWL27eNJtJLOCDoWXdgeTEEosqPxoBK/TwDzWY9rowy51gJ1dGr2zLpS2aVH5QQ+Hbw88sZ7OClrGXbQrkMTTAQu4HXqUv9eh7J0OSfo7tiIU+GItilpUuM/AF2tg98eR36Q+FryQ2kjbVhximQu8dgPKxPMoeTuH4tfqDIWvCBQ2KlDQKEe9dBlGTwR36+THFZg+QoUxAL0jgsoOQzYYS+wjskcjTzSToVAkA7Hqg4Spc6tm4vgT+eIFVvmb+eCSMwLlih/cNg0KmpRoGzdl+BXOb5jAsMYNjSWAm9VjwesPR1knFilPNMu510CkdPZtqK1BvJQsoaRZjqLGaTzv1UNp9EJl9uNqxefU5QdDnFNX+Y5Qxrn9bDLUR6zjqzsMizeWYdG5gy6ZDbk8aehiuYRz5jHdeDTKvlY1IrhSMUxe4g9SuVwpdaFsgDxf2i84V9zH/us1/is/AdevBaK9Tb3EAAAAAElFTkSuQmCC"></img>';
-$icon_options_restore ='<img id="opt_restore" title="View removed results" style="margin:-2px 2px -2px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACnUlEQVQ4jYWSS2xMYRiGn/+f/58zZ2Zo9aJSt1ONS6RYuKaJiGBBwkikEaVsxFaIREIQwYaFxMKGhcQtNqUVC3GJIEgQqTsZnLauVdNRptPpnHN+C5lJlcS7/d7nzZvv+wT/0NoWt9o3LAZqAR9IhgRXTyecrqFeMQQc6RsOAY2AGuIdAE4owfZTCSf9V0BjizslMFwBxvyr1SAlpWDJmYTjFgPWtbqlXsAjwPkPXNBzLcXskyvG9ykAL2DXYHhapcXCsXFqSjQGeJMe4Fp7hhepXKHyVC8wW4H9oqm1PZIPzBdgeFQJNs4oY2aVzfPufq53ZLCVYH3dCJSAux+znHjaQ843AJ9jWo6WXmDmAMNLLcmu+pHMrLJ5lcpx4PITWg7vZKDtCloKhBDUj46yY14lMS0BRmW9oE4acKyQYNvsSqrjGoBb7zN8vXqS7Ns2bl5q5n7bM9q6sgA4JWG2zipHCQgM4yQQ+IEh4wXFDZWGQ1TEbQA6OzvYc/wcL1MDxbmbytCZ7sUYgxKQ9AwcftDNllkVTCmzWOLE6Vm9iWZPggxRvaiRBWOjANx418O+2x1EwmHSfX1JseFiu8r55hNQERKQmBBh+aRyPvzwuNH5EykEC8fFqIoqjj38wKln3cSsMLbW7qi4rhEAay64uw3s/X3SAC/3nWW1I6iriBMYeNz1k/Ovv/E9D1GtsbUmotXm8w0TjygAJcXBfGBWAdOVlGCVcOTRZ3L5PFpKwiGFpVQRtsP6Xkyro8VPBFjb4o7xDZeBqYUmbuobnh9gKYWtivADS6mlZ1c63QCyEHA64bzXUswFDgK9SkpqysoZZkWwlSaiVTqi1R5bqfkF+I8Gg9XU2h71AlNvYILn+/T2Z5PxsL7T3DC5f6j3F/Zl9lJ4oplxAAAAAElFTkSuQmCC"></img>';
-$icon_options_save ='<img id="opt_save" title="Save settings..." style="margin:-2px 2px -2px 2px; src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU9JREFUeNpi9K3Y28fAwJACxAwWWqIsDESAE9de/4Ey57D8+/svRclAjRfEq4qSI0Y/Q96yR2D63oVbKUz//v5lIBeA9LL8/fOX4c+ff3DBu69/Mtx59ROrBhUxdgZlUXa4epBelj9//jD8RjIApACE8QGYepBelr+//zD8+v2XJBfA1IP0svxBM4AYF8DUg/Qy/fkFNODXXzDefek9wYADqYGpB+kFuuA3w89fkGiduO0RGBMLQHrBXvj5i7yo/AMOA6gXYKA7SopBWZwNq4a7L38xxGWtYBC3sYMY8AtbIAI1O2XuArP3TXdDMQBmMHIgYkQjOHr+/SMqFv6CY+HPnznvTp/4DEocsAQC0o/PDJhaUEJiun+4uAiYJOd8OH38MyyJHp7tAcY4Aw+s+R8kKUMzRRGI/nTmWMqs5T/xpqIv3379ZDhzDMadAxBgALae7bsNa2kaAAAAAElFTkSuQmCC"></img>';
+$colhalf = parseInt($(".colhead").height()) / 2;
+$ver_htr = $(".colhead").position().top + $colhalf - 8 + 'px';																			// Help, Restore and Timer ICON Vpos
+$icon_options_settimer ='<img id="opt_settimer" title="Set reload frequency" style="margin:0px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmRJREFUeNqkU0trGlEUvjOOKVHHUaO0DpZIV32FxMCEvCSJuAhtwO5CQpJdsskuG7f9H9mZgiBdKKQluywiErSESGlxVQjUXusjdHxMxGfOmTrDlC666IHv3jvn3u+7Z845lxkOh+R/jMMhEokQlmWJyWQiDMPwgOfg9gGE0TkZ8B0u+wpo9Pt9MhgMSCqV+i1gsKc2u31tLhhcm5ufl7wejxedtFKh2cvLXPbi4rwhy+fgKvwRgUZ2eTxvtg8ODn1er89hsZDP19dkamaGTIqiX1hf9z+bnl6IHx8LZUqTmgiLA4Rlt/J8eHt//9Dpcvns4+Oq4lUup6ujD/d24AKIMowcXQD+6aUUDK7yDofPMjZGWIZRSe12WxdAH+7Z4MziysoqcnSBXq/nnwoEJFzX7+7ITbWqolAo6GsE7mHyApIkIUfPAXw4BYfjoXbbpNutzo1GQ1+r54BcvL0leBY5RgEWyzgwkF+FwyQUCpHdzU3C87wKm81GZpeWyMLyssoxCshNWS5bBOGxdls8kSA7W1vkXTyuR4AtJ3c6RKnXy8jRc9Dtdm8+ZTJ5DhoJw0QTXC6VjLMGSCB5ANXIptN55BirkP+QTKY7zSbtjwQ0EaNhAtl2m75PJNLI0QVg49fPUunsbTR6Itdq1MSyf/U8+hRZptGjoxNK6Rly0M/gY2KwxtB5Vqt1VhTFyO7e3uLrjY0Xj0RxAjuiRGnt4+npl1gslikWi6lWq3WlKApRuSMBTOYEwM1xnNNsNj+BhyUaHxOE/AP++9soeRVAFbg9TQBjtozA/eMF9wEtgALcwb0AAwCoRifZl32HrAAAAABJRU5ErkJggg=="></img>';
+$icon_options_help ='<img id="opt_help" title="Help" style="margin:0px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKkSURBVDjLpZPdT5JhGMb9W+BPaK3matVqndXWOOigA6fmJ9DUcrUMlrN0mNMsKTUznQpq6pyKAm8CIogmypcg8GIiX8rHRHjhVbPt6o01nMvZWge/k3vP9duuZ/edAyDnf/hjoCMP2Vr3gUDj3CdV6zT1xZ6iFDaKnLEkBFOmPfaZArWT5sw60iFP+BAbOzTcQSqDZzsNRyCNkcVoaGghzDlVQKylOHJrMrUZ2Yf52y6kc36IxpyoH1lHF7EBgyMKV4jCJ5U/1UVscU4IZOYEa3I1HtwI01hwxlDLhDoJD/wxGr5YGmOLAdRIrVCuhmD3JdA6SQabx12srGB0KSpc86ew4olDOGjH4x4z0gdHDD9+c4TaQQtq+k2Yt0egXYugTmoVZgV9cyHSxXTtJjZR3WNCVfcK/NE0ppYDUNu2QTMCtS0IbrsOrVMOWL27eNJtJLOCDoWXdgeTEEosqPxoBK/TwDzWY9rowy51gJ1dGr2zLpS2aVH5QQ+Hbw88sZ7OClrGXbQrkMTTAQu4HXqUv9eh7J0OSfo7tiIU+GItilpUuM/AF2tg98eR36Q+FryQ2kjbVhximQu8dgPKxPMoeTuH4tfqDIWvCBQ2KlDQKEe9dBlGTwR36+THFZg+QoUxAL0jgsoOQzYYS+wjskcjTzSToVAkA7Hqg4Spc6tm4vgT+eIFVvmb+eCSMwLlih/cNg0KmpRoGzdl+BXOb5jAsMYNjSWAm9VjwesPR1knFilPNMu510CkdPZtqK1BvJQsoaRZjqLGaTzv1UNp9EJl9uNqxefU5QdDnFNX+Y5Qxrn9bDLUR6zjqzsMizeWYdG5gy6ZDbk8aehiuYRz5jHdeDTKvlY1IrhSMUxe4g9SuVwpdaFsgDxf2i84V9zH/us1/is/AdevBaK9Tb3EAAAAAElFTkSuQmCC"></img>';
+$icon_options_restore ='<img id="opt_restore" title="View removed results" style="margin:0px 2px; display:none; cursor:pointer" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACnUlEQVQ4jYWSS2xMYRiGn/+f/58zZ2Zo9aJSt1ONS6RYuKaJiGBBwkikEaVsxFaIREIQwYaFxMKGhcQtNqUVC3GJIEgQqTsZnLauVdNRptPpnHN+C5lJlcS7/d7nzZvv+wT/0NoWt9o3LAZqAR9IhgRXTyecrqFeMQQc6RsOAY2AGuIdAE4owfZTCSf9V0BjizslMFwBxvyr1SAlpWDJmYTjFgPWtbqlXsAjwPkPXNBzLcXskyvG9ykAL2DXYHhapcXCsXFqSjQGeJMe4Fp7hhepXKHyVC8wW4H9oqm1PZIPzBdgeFQJNs4oY2aVzfPufq53ZLCVYH3dCJSAux+znHjaQ843AJ9jWo6WXmDmAMNLLcmu+pHMrLJ5lcpx4PITWg7vZKDtCloKhBDUj46yY14lMS0BRmW9oE4acKyQYNvsSqrjGoBb7zN8vXqS7Ns2bl5q5n7bM9q6sgA4JWG2zipHCQgM4yQQ+IEh4wXFDZWGQ1TEbQA6OzvYc/wcL1MDxbmbytCZ7sUYgxKQ9AwcftDNllkVTCmzWOLE6Vm9iWZPggxRvaiRBWOjANx418O+2x1EwmHSfX1JseFiu8r55hNQERKQmBBh+aRyPvzwuNH5EykEC8fFqIoqjj38wKln3cSsMLbW7qi4rhEAay64uw3s/X3SAC/3nWW1I6iriBMYeNz1k/Ovv/E9D1GtsbUmotXm8w0TjygAJcXBfGBWAdOVlGCVcOTRZ3L5PFpKwiGFpVQRtsP6Xkyro8VPBFjb4o7xDZeBqYUmbuobnh9gKYWtivADS6mlZ1c63QCyEHA64bzXUswFDgK9SkpqysoZZkWwlSaiVTqi1R5bqfkF+I8Gg9XU2h71AlNvYILn+/T2Z5PxsL7T3DC5f6j3F/Zl9lJ4oplxAAAAAElFTkSuQmCC"></img>';
+$icon_options_save ='<img id="opt_save" title="Save settings..." style="margin:0px 2px; src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAU9JREFUeNpi9K3Y28fAwJACxAwWWqIsDESAE9de/4Ey57D8+/svRclAjRfEq4qSI0Y/Q96yR2D63oVbKUz//v5lIBeA9LL8/fOX4c+ff3DBu69/Mtx59ROrBhUxdgZlUXa4epBelj9//jD8RjIApACE8QGYepBelr+//zD8+v2XJBfA1IP0svxBM4AYF8DUg/Qy/fkFNODXXzDefek9wYADqYGpB+kFuuA3w89fkGiduO0RGBMLQHrBXvj5i7yo/AMOA6gXYKA7SopBWZwNq4a7L38xxGWtYBC3sYMY8AtbIAI1O2XuArP3TXdDMQBmMHIgYkQjOHr+/SMqFv6CY+HPnznvTp/4DEocsAQC0o/PDJhaUEJiun+4uAiYJOd8OH38MyyJHp7tAcY4Aw+s+R8kKUMzRRGI/nTmWMqs5T/xpqIv3379ZDhzDMadAxBgALae7bsNa2kaAAAAAElFTkSuQmCC"></img>';
 $(".thin").after('<div style="width:60px; position:absolute; left:'+$hor_htr+'; top:'+$ver_htr+';">'+ $icon_options_help + $icon_options_restore + $icon_options_settimer +'</div>');	// Help, Restore and Timer ICONS in header
 $("tr").children(":first-child").css({'font-variant':'small-caps'});																// Make the forum links small-caps.
 $("tr").children(":first-child").next().children(":first-child").children(":first-child").each(function(){							// Find first thread link in second column of the table
@@ -434,7 +445,7 @@ $(".tr_options").css({ 'width':'18px', 'height' : '18px', 'background-color' : '
 
 $("#opt_toggle").click(function(){$(".tr_options").toggle();$("#opt_help").toggle();$("#opt_restore").toggle();$("#opt_settimer").toggle();});					// Show / Hide drop-down menus
 $("#opt_help").click(function(){$("#help").toggle();});
-//$("#opt_restore").click(function(){$("#results").toggle();});							// #results are still intact... maybe I'll use it for something
+//$("#opt_restore").click(function(){$("#results").toggle();});											// #results are still intact... maybe I'll use it for something
 $("#opt_restore").click(function(){$("tr").not(".colhead").toggle("hidden show");});
 $("#opt_settimer").click(function(){$("#frequency").toggle();});
 
