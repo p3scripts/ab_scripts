@@ -185,13 +185,13 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 				$realid = "forumid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide()
 				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
-				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewforum&'+$realid+'">'+$realid+'</href></li>');
 			} else if ($withthis = "thr"){
 				$realid = "threadid=" + $idnumber;
 				$('a[href$="' + $realid + '"]').parent().parent().parent().hide();
 				$('a[href$="' + $realid + '"]').parent().parent().parent().children(":first-child").children(":first-child").append('&#x2718;');
-				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.8'});
+				$('a[href$="' + $realid + '"]').parent().parent().parent().css({'opacity':'0.75'});
 				$("#res_tab").children(":last-child").after('<li style="list-style-type:none;"><input id="'+ $restore +'_whichwasremoved" style="height:16px; padding:0px !important; font-size:12px; margin:3px 20px 3px 10px;" type="button" value="Restore"><a id="'+ $restore +'" target="_blank" style="font-size:14px;" href="https://animebytes.tv/forums.php?action=viewthread&'+$realid+'">'+$realid+'</href></li>');
 			};
 		};
@@ -203,8 +203,9 @@ for ( var i = 0, len = localStorage.length; i < len; ++i ) {
 $storedvalue = localStorage.getItem( localStorage.key( i ) );
 	if( $storedvalue.substring(0, 3) == "WHT") {
 		$thread = $storedvalue.substring(3);
+		$('a[href$="' + $thread + '"]').parent().parent().parent().removeAttr('style');
 		$('a[href$="' + $thread + '"]').parent().parent().parent().show();
-		$('a[href$="' + $thread + '"]').before('&#x2714;');
+		$('a[href$="' + $thread + '"]').after('&#x2714;');
 	};
 };
 
@@ -284,7 +285,7 @@ if ( $(".tr_options[id='" + $thr_id + "']").parent().prev().prev(":contains('\u2
 	$("option[id='RWHT"+$thr_id+"']").hide();
 };
 
-if ( $(".tr_options[id='" + $thr_id + "']").parent().prev().prev().prev(":contains('\u2718')").length > 0 ) {
+if ( $(".tr_options[id='" + $thr_id + "']").parent().parent().css('opacity') == 0.75) {
  	$("option[id='FBGR"+$thr_id+"']").hide();
 	$("option[id='FBGG"+$thr_id+"']").hide();
 	$("option[id='FBGB"+$thr_id+"']").hide();
@@ -636,5 +637,5 @@ $("td:parent:first-child:contains('Tutorials')").children(':first-child').prepen
 // ICON - Solved
 $("td:parent:first-child:contains('Solved')").children(':first-child').prepend($icon_solved);
 
-// ICON - Creative Workshop
+// ICON - Solved
 $("td:parent:first-child:contains('Creative Workshop')").children(':first-child').prepend($icon_creawork);
