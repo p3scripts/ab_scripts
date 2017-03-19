@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
 // @author 			psyntax3rr0r
-// @version 		1.3.5
+// @version 		1.3.6
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads and entire forums on the Unread Forum Posts page.
@@ -174,7 +174,7 @@ $timerId = setInterval(function(){
       +--------------------------------------------------------------------------------------*/
 
 if(window.location == "https://animebytes.tv/pastes/new"){
-	$timerId = '';
+	clearInterval($timerId);
 	$("#cdown,#frequency").remove();
 	$(".linkbox").children(":first-child").before('<a id="helpmesavethis" style="cursor:pointer">[UFP Backup] </a>')
 	$("#helpmesavethis").on('click', function getLocalStorage() {
@@ -410,7 +410,7 @@ if ($curr_css == "milkyway" || $curr_css == "dream" || $curr_css == "toblerone" 
 	$bg_rgba = $bg.replace(')', ', 0.5)').replace('rgb', 'rgba');										// Create RGBA value from RGB
 	$("tbody").children().not(":hidden,.colhead").not(":even").css({'background':''+$bg_rgba+''});		// Fixing the f#%cked up nth-child(2n) td background coloring
 } else {
-	$(".min_padding").css({'padding':'2px'});															// Smaller padding on regular stylesheets
+	$(".min_padding").css({'padding':'6px'});															// Smaller padding on regular stylesheets
 };
 
 $("[id*='_whichwasremoved']").click(function(){															// This part currently isn't used
