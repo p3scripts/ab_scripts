@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name 			AnimeBytes QLinks
 // @author 			psyntax3rr0r
+// @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AnimeBytes_QLinks.user.js
+// @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AnimeBytes_QLinks.user.js
 // @version 		0.1
 // @description 	Because we need them...
 // @include 		*animebytes.tv/*
