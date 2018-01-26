@@ -14,8 +14,8 @@ Unread Forum Posts - Revised is the main reason I made this github account, so t
 * [x] Whitelisting threads if the parent forum is removed
 * [x] Switch to see removed forums/subforums/threads
 * [x] Timer for automatic page reload
-* [ ] Settings backup
-* [ ] New coloring system
+* [x] Settings backup
+* [x] New coloring system
 * [ ] Add-on to make changes directly from threads
 
 ### BBCode - ColorPicker
