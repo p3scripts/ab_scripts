@@ -8,3 +8,5 @@
 // ==/UserScript==
 
 $('a[href*="anidb.net"],[href*="animenewsnetwork.com"],[href*="wikipedia.org"],[href*="myanimelist.net"],[href*="mangaupdates.com"]').attr('target','_blank');
+
+//test
