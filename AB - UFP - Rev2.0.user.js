@@ -21,29 +21,29 @@
       +---------------------------------------------------------------------------------------+
       |||||||||||||||||||||||||||||||||||||| CONTENTS |||||||||||||||||||||||||||||||||||||||||
       +---------------------------------------------------------------------------------------+
-      | 1.  Get UserID + Authkey --- Ajax star/stop curtain                       Line : 46   |
+      | 1.  Get UserID + Authkey --- Ajax start/stop curtain                      Line : 46   |
       | 2.  If ajaxreload is set to true, merge the pages available.              Line : 59   |
-      | 3.  Default values set in localStorage on the first run.                  Line : 90   |
-      | 4.  Figuring out which stylesheet is used by the user.                    Line : 154  |
-      | 5.  "Stealing" some css styling info from the currently used stylesheet   Line : 172  |
-      | 6.  Reload timer, version number and Auto-read requests                   Line : 206  |
-      | 7.  If you are on *pastes/new* fill the form by clicking on [UFP Backup]  Line : 297  |
-      | 8.  Additional options window                                             Line : 321  |
-      | 9.  localStorage Backup                                                   Line : 602  |
-      | 10. HEX -> RGB                                                            Line : 652  |
-      | 11. Reading values from localStorage and do the filtering.                Line : 667  |
-      | 12. Forum background and thread highlight settings container.             Line : 716  |
-      | 13. Restoring whitelisted items.                                          Line : 722  |
-      | 14. Get Forum and Thread IDs for every row to do exact searches later.    Line : 754  |
-      | 15. Create drop-down menu in the last cell...                             Line : 791  |
-      | 16. Dropdown-menu option filtering                                        Line : 814  |
-      | 17. Storing values in localStorage                                        Line : 844  |
-      | 18. Dropdown-menu and additional options buttons                          Line : 985  |
-      | 19. Images stored as variables to save some space                         Line : 1027 |
-      | 20. Forum icons and glow effect for threads older than one week.          Line : 1081 |
+      | 3.  Default values set in localStorage on the first run.                  Line : 98   |
+      | 4.  Figuring out which stylesheet is used by the user.                    Line : 163  |
+      | 5.  "Stealing" some css styling info from the currently used stylesheet   Line : 181  |
+      | 6.  Reload timer, version number and Auto-read requests                   Line : 215  |
+      | 7.  If you are on *pastes/new* fill the form by clicking on [UFP Backup]  Line : 334  |
+      | 8.  Additional options window                                             Line : 358  |
+      | 9.  localStorage Backup                                                   Line : 639  |
+      | 10. HEX -> RGB                                                            Line : 689  |
+      | 11. Reading values from localStorage and do the filtering.                Line : 704  |
+      | 12. Forum background and thread highlight settings container.             Line : 753  |
+      | 13. Restoring whitelisted items.                                          Line : 759  |
+      | 14. Get Forum and Thread IDs for every row to do exact searches later.    Line : 791  |
+      | 15. Create drop-down menu in the last cell...                             Line : 828  |
+      | 16. Dropdown-menu option filtering                                        Line : 851  |
+      | 17. Storing values in localStorage                                        Line : 881  |
+      | 18. Dropdown-menu and additional options buttons                          Line : 1022 |
+      | 19. Images stored as variables to save some space                         Line : 1064 |
+      | 20. Forum icons and glow effect for threads older than one week.          Line : 1118 |
       +--------------------------------------------------------------------------------------*/
       /*--------------------------------------------------------------------------------------+
-      | 1.               Get UserID + Authkey --- Ajax star/stop curtain                      |
+      | 1.               Get UserID + Authkey --- Ajax start/stop curtain                     |
       +--------------------------------------------------------------------------------------*/
 
 $versionnumber = (' V'+GM_info.script.version+'');															// Current version, based on @version
@@ -60,15 +60,21 @@ $h3_color = $("h3").css('color');
       +--------------------------------------------------------------------------------------*/
 
 if (localStorage.getItem('ajaxreload') == 'true'){															// If you pressed OK to perform ajax reload
-	localStorage.setItem('timer','15');																		// Set timer to 15 minutes
+	if (localStorage.getItem('timer') > 0){
+        if (localStorage.getItem('timer') < 15){
+            localStorage.setItem('timer','15');																// Set timer to 15 minutes if the timer isn't disabled or the frequency isn't greater than 15 minutes
+        }
+    };
 	localStorage.setItem('ajaxreload','false');																// Set ajaxreload back to false
+	localStorage.setItem('merged','true');																    // Set merged to true
     $maxpagenum = 5;																						// Maximum number of pages to load
 	$lastpagenum = $("a.next-prev.last").attr("href").match(/\d+/);											// Page number of the last page
 	$(".pagenums").replaceWith('<br>');																		// Replace page numbers with line break
     if ( $lastpagenum > $maxpagenum ){																		// If you have more than 5 pages, reduce it to 5
-        $pagesleft = $lastpagenum - $maxpagenum;
-        alert("You still have " + $pagesleft + " page(s) left.\nDon't forget to refresh the page after you've finished.");
+        $pagesleft = $lastpagenum - $maxpagenum; //alert("You still have " + $pagesleft + " page(s) left.\nDon't forget to refresh the page after you've finished.");
         $lastpagenum = 5;
+    } else {
+        $pagesleft = 'no'
     };
 	for($nextpage = 2; $nextpage <= $lastpagenum; $nextpage++){											    // Load all pages with ajax, but if it's more than 5 pages, load the first 5
 		$.ajax({
@@ -84,6 +90,8 @@ if (localStorage.getItem('ajaxreload') == 'true'){															// If you press
 		});
 	};
 	console.log("AJAX reload was succesful.");
+} else {
+    localStorage.setItem('merged','false');
 };
 
       /*--------------------------------------------------------------------------------------+
@@ -101,6 +109,7 @@ if(!localStorage.getItem('threadlinks')) { localStorage.setItem('threadlinks','f
 if(!localStorage.getItem('profilelinks')) { localStorage.setItem('profilelinks','false');};		// Profile URL options set to false on first run.
 // Ajax reload
 if(!localStorage.getItem('ajaxreload')) { localStorage.setItem('ajaxreload','false');};			// Set AJAX reload to false on first run.
+if(!localStorage.getItem('merged')) { localStorage.setItem('merged','false');};                 // Indicates if you're on a merged page
 // Options
 if(!localStorage.getItem('options')) { localStorage.setItem('options','false');};			    // Options and Drop-down are hidden by default
 // Auto-read options
@@ -207,7 +216,7 @@ console.log("Got some stuff...");
       +--------------------------------------------------------------------------------------*/
 
 $("h2").append('<span style="font-size: 10px;"><a title="UFP - Revised '+$versionnumber+'" alt="UFP - Revised '+$versionnumber+'" target="_blank" href="https://animebytes.tv/forums.php?action=viewthread&threadid=21653&page=1#post1112446"> '+$versionnumber+'</a></span>');
-$("h2").append('<span id="cdown" style="cursor: pointer; float: right; font-size: 12px; opacity: '+localStorage.getItem('opacity')+'; color: '+localStorage.getItem('tcolor')+'"></span><span style="background: '+$bg+'; border: 1px solid '+$h3_color+'; border-radius: 3px; padding: 0px 3px; font-size: 10px; display: none; z-index: 10; position: fixed;" id="cursortext">Force reload</span>');	// Reload timer & Timer options window
+$("h2").append('<span id="cdown" style="cursor: pointer; float: right; font-size: 12px; opacity: '+localStorage.getItem('opacity')+'; color: '+localStorage.getItem('tcolor')+'"></span>');	// Reload timer & Timer options window
 
 if (localStorage.getItem('timer_disabled') == 'true'){
     $countdown = -1;
@@ -287,9 +296,37 @@ $timerId = setInterval(function(){
 	} else { $("#cdown").html("<h3>Reload timer disabled</h3>");}                                                                               // Timer disabled
 }, 1000);
 
+if (localStorage.getItem('merged') == 'true'){
+    if ($pagesleft != 'no'){
+        if ($pagesleft == 1){
+            $mergetext = 'there is 1 page left!';
+            $mergecursor = 'pointer';
+        } else {
+            $mergetext = 'there are ' + $pagesleft + ' pages left!';
+            $("#pagesmerged").css('cursor','pointer');
+            $mergecursor = 'pointer';
+        }
+    } else {
+        $mergetext = 'there are no pages left!';
+        $mergecursor = 'disabled';
+    }
+$("h2").after('<h3 id="pagesmerged" class="size1" style="cursor: '+$mergecursor+'; float: right; text-align: right;">Pages are merged, and<br>'+ $mergetext +'</h3>');
+
+};
+
+$("h2").append('<span style="background: '+$bg+'; border: 1px solid '+$h3_color+'; border-radius: 3px; padding: 0px 3px; font-size: 10px; display: none; z-index: 10; position: fixed;" id="cursortext">Force reload</span>');
+$("h2").append('<span style="background: '+$bg+'; border: 1px solid '+$h3_color+'; border-radius: 3px; padding: 0px 3px; font-size: 10px; display: none; z-index: 10; position: fixed; text-align: center;" id="cursortext2">Force reload<br>with merged pages</span>');
+
+
 $("#cdown").on('click',function(){$countdown = 3000; setInterval($timerId);});                                                                  // Force-reload
 $("#cdown").mouseover(function(){$("#cursortext").show()}).mouseout(function(){$("#cursortext").hide()});                                       // Show/Hide reload text
 $("#cdown").mousemove(function(e){ $cursorposition = { top: e.pageY + 10, left: e.pageX + 10 }; $("#cursortext").offset($cursorposition);});    // Floating reload text
+
+if ( localStorage.getItem('merged') == 'true' && $pagesleft != 'no'){
+    $("#pagesmerged").on('click',function(){localStorage.setItem('ajaxreload','true'); $countdown = 3000; setInterval($timerId);});                                                                   // Force-reload and merge pages
+    $("#pagesmerged").mouseover(function(){$("#cursortext2").show()}).mouseout(function(){$("#cursortext2").hide()});                                       // Show/Hide reload text
+    $("#pagesmerged").mousemove(function(e){ $cursorposition = { top: e.pageY + 10, left: e.pageX + 10 }; $("#cursortext2").offset($cursorposition);});    // Floating reload text
+};
 
 console.log("Reload timer... works... and the Auto-read feature as well...");
 
@@ -1012,7 +1049,7 @@ $("#lightbox,#curtain").click(function(){																// Hide everything when
 });
 
 $("#opt_ajaxreload").click(function(){																	// AJAX reload button
-	if (confirm("You are going to reload the page and merge all results ( the first 5 pages\nif you have more than 5) into one table. The reload timer will be set to 15\nminutes so you'll have enough time to go through all the unread posts.\nDon't forget to set your timer before the next reload occurs!\n\nAvoid using this option too often because\nwe don't want to stress the servers!\n\nDo you want to proceed?")){
+	if (confirm("You are going to reload the page and merge all results ( the first 5 pages if you\nhave more than 5) into one table. The reload timer will be set to 15 minutes ( if\nthe timer is active and the reload frequency is less than 15 minutes) so you will\nhave enough time to go through all the unread posts. If you have pages left, you\ncan force a reload with merging the pages again, by clicking the informative text\nunder the timer.\n\nDon't forget to reset your timer before the next reload occurs!\n\nDo you want to proceed?")){
 		localStorage.setItem('ajaxreload','true');
         $countdown = 1000;
         setInterval($timerId);
