@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name 			AnimeBytes BBCode improvements
+// @name 			AB - BBCode improvements
 // @author 			psyntax3rr0r
 // @version 		1.0
 // @description 	Some improvements
