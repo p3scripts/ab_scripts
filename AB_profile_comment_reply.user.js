@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        AB profile comment reply
 // @namespace   AB profile comment reply
-// @author      psyntax3rr0r
+// @author      p3
 // @description Reply button for profile comments
 // @icon        http://animebytes.tv/favicon.ico
 // @include     *https://animebytes.tv/user.php?*
