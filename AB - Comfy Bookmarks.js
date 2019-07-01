@@ -34,6 +34,7 @@ tn7jyW3Rg/hAMbW4qIYhxshGwoaCIiAULQWYEIpTOFU4A3rrNNoiU1poIgLCEXiIfSBAoaLBdIFAQksq
 voT/UIEzly6BUjzz+hm+W16mLCXS8yBN58WFIFjLhTg+GATctZbJ105z+sqHWAsm1gjHAcfBWstnZ89yZ3WVEPhTa9IkWZfAcZOmqDRlzHXZ/PwLvq4skOcGoTyslGTG8OXsLO2VFZ7wfPwsQyYJwOMSMJ6UhK5Lvx8QKEUramCSBJsbjDFk+/vEOzsUPI9S6FNwXTwpARw\
 J/CqEwJWSKNYcmppi5tNPsFKSmvsAPMXLHy/jjo8T7WtcxwEEwLoErtnunze05pX3P8DgkOc531Yq/HD5MibLwXV57uJFNvb2SIGOzQGuOSdd9yZCLCgp8ZVCSMnh6SlW33obtb6G3Npi80advhMn+GVpieTWLZIkoXX/Bm8cFMkRojJcKJBJSTvLePpImeenn8Uqh+9v/M\
 yPUYOBIMTJUjZaLTp5vljT+vwDVVZCzJaLRY4MDjLU30+xWEIqlziO+Wd3l41mk9u7u3SMebDKvTIJqBU9j4FCgaHSIYQU7Ozt0bp3j3YcY+H/ZeqBPAbMd3We6Mb1rs7v1bT+o3f/3wEAGudCrewVjLoAAAAASUVORK5CYII='>");
+$(".box.torrent_filter_box").hide();
 
 $("#collage_table > tbody > tr > td > a").each(function(){
     $nope  = $(this).attr("href");             // #group_ID
