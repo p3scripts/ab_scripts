@@ -2,8 +2,8 @@
 // @name 			AB - UFP - Revised
 // @author 			p3
 // @version 		2.0
-// @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
-// @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
+// @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20UFP%20-%20Rev2.0.user.js
+// @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20UFP%20-%20Rev2.0.user.js
 // @description 	You can highlight / remove threads or entire forums on the Unread Forum Posts page.
 // @include 		*https://animebytes.tv/pastes/new*
 // @include 		*https://animebytes.tv/forums.php?*action=viewunread*
