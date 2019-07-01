@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name 			AB - UFP - Revised
-// @author 			psyntax3rr0r
-// @version 		1.9.9
+// @author 			p3
+// @version 		2.0
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB_-_UFP_-_Revised.user.js
 // @description 	You can highlight / remove threads or entire forums on the Unread Forum Posts page.
@@ -290,7 +290,7 @@ $timerId = setInterval(function(){
             clearInterval($timerId);
             window.location.replace("https://animebytes.tv/forums.php?action=viewunread");
         };
-		if ( $("#additional_options:visible") || $("##backandhigh:visible")){$("#backandhigh,#additional_options,#lightbox,#curtain").hide();};	// Hide everything if one of them is visible
+		if ( $("#additional_options:visible") || $("#backandhigh:visible")){$("#backandhigh,#additional_options,#lightbox,#curtain").hide();};	// Hide everything if one of them is visible
 		$("#lightbox,#curtain").toggle(); $("#cdown").hide();	                                                                                // Show curtain and hide the timer while Reloading...
 	} else if ($countdown > 0) { $("#cdown").html("<h3 style='color: inherit;'>Next reload in " + $min + "m " + $sec + "s</h3>");               // Timer text
 	} else { $("#cdown").html("<h3>Reload timer disabled</h3>");}                                                                               // Timer disabled
