@@ -2,8 +2,8 @@
 // @name 			AB - BBCode Improvements
 // @author 			p3
 // @version 		1
-// @downloadURL		
-// @updateURL		
+// @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20BBCode%20Improvements.user.js
+// @updateURL		https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20BBCode%20Improvements.user.js
 // @description 	BBCode Improvements
 // @include 		*animebytes.tv/*
 // @grant			GM_addStyle
