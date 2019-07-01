@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name 			AB - UFP - Revised
+// @name 			AB - UFP - Rev2.0
 // @author 			p3
 // @version 		2.0
 // @downloadURL		https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20UFP%20-%20Rev2.0.user.js
