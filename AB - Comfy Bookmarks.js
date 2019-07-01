@@ -86,6 +86,6 @@ UOrLt+Ia2xetgooWklnKEHvd2D6y4jQsDTeCLlXz6t+bnwCFhZQA1nfv6UVtzLCBALj+MJdye3iSFYU0
         $this = $("#group_" + $(this).attr("id") + ", tr[class*=groupid_" + $(this).attr("id") + "]");
         $("tr[id*=group], tr[class*=groupid_]").not($this).hide();
         $this.toggle();
-        $('html, body').animate({ scrollTop: $(this).parent().parent().offset().top }, 500);
+        $('html, body').animate({ scrollTop: ($(this).parent().parent().offset().top) -5 }, 500);
     });
 });
