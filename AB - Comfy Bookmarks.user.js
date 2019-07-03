@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AB - Comfy bookmarks
-// @version      0.2
+// @version      0.3
 // @description  Comfy bookmarks
 // @downloadURL  https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.user.js
 // @updateURL    https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.user.js
@@ -10,6 +10,18 @@
 // @grant        GM_getValue
 // @icon         http://animebytes.tv/favicon.ico
 // ==/UserScript==
+
+if ( $(location).attr("href").indexOf("?") > 0 ){
+    if ( $(location).attr("href").indexOf("&") > 0 ) {
+        $whatfilter = $(location).attr("href").split("&");
+        $filtertype = $whatfilter[$whatfilter.length-1];
+    } else {
+        $whatfilter = $(location).attr("href").split("?");
+        $filtertype = $whatfilter[$whatfilter.length-1];
+    };
+} else {
+    $filtertype = "";
+};
 
 $(".sidebar").prepend("<div class='box'>\
                           <div class='head'><strong>Comfy options</strong></div>\
@@ -21,8 +33,10 @@ $(".sidebar").prepend("<div class='box'>\
 
 $("#everybookmark").click(function(){
     GM_setValue('all', true);
-    location.reload();
+    location.href = "/bookmarks.php?"+$filtertype;
 });
+
+if ($(".pagenums").length < 1 ){$("#everybookmark").attr("disabled","true").css("cursor","not-allowed");};
 
 if (GM_getValue('all') == true) {
     $(".pagenums, .pagenums + br").hide();
@@ -35,7 +49,7 @@ function everybookmark(){
     $lastpagenum = $("a.next-prev.last").attr("href").match(/\d+/);
     for ( $nextpage = 2; $nextpage <= $lastpagenum; $nextpage++ ){
         $.ajax({
-            url:      "https://animebytes.tv/bookmarks.php?page="+$nextpage,
+            url:      "/bookmarks.php?page="+$nextpage+"&"+$filtertype,
             async:    false,
             dataType: 'html',
             success:  function(data){
@@ -43,7 +57,7 @@ function everybookmark(){
                 $(data).find("#discog_table > tbody").each(function(){ $("#discog_table > tbody").append($(this).html()); });
             }
         });
-        if ( $nextpage == $lastpagenum ) makeitcomfy();
+        if ( $nextpage == $lastpagenum ) { GM_setValue('all', false); makeitcomfy(); };
     };
 };
 
@@ -126,6 +140,5 @@ function makeitcomfy(){
             $this.toggle();
             $("html, body").animate({ scrollTop: ($(this).parent().parent().offset().top) -5 }, 500);
         });
-        GM_setValue('all', false);
     });
 };
