@@ -2,8 +2,8 @@
 // @name         AB - Comfy bookmarks
 // @version      0.2
 // @description  Comfy bookmarks
-// @downloadURL  https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.js
-// @updateURL    https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.js
+// @downloadURL  https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.user.js
+// @updateURL    https://github.com/p3scripts/ab_scripts/raw/master/AB%20-%20Comfy%20Bookmarks.user.js
 // @author       p3
 // @match        https://animebytes.tv/bookmarks.php*
 // @grant        GM_setValue
